@@ -1,10 +1,9 @@
-import pygame
+import tkinter as tk
 from queue import PriorityQueue
 
 # Set the display
 WIDTH = 800
-WIN = pygame.display.set_mode((WIDTH, WIDTH))
-pygame.display.set_caption("Pathfinding Algorithm Visualiser")
+ROWS = 50
 
 # Colour coordinate node's colour
 RED = "#F65353"
@@ -70,8 +69,10 @@ class Node:
     def MakePath(self):
         self.color = ORANGE
 
-    def Draw(self, win):
-        pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.width))
+    def Draw(self, canvas):
+        canvas.create_rectangle(
+            self.x, self.y, self.x + self.width, self.y + self.width, fill=self.color
+        )
 
     # Check for neighbours that are not wall nodes or outside of grid
     def UpdateNeighbours(self, grid):
@@ -87,9 +88,6 @@ class Node:
 
         if self.col < self.totalRows - 1 and not grid[self.row][self.col + 1].IsWall(): # RIGHT
             self.neighbours.append(grid[self.row][self.col + 1])
-    
-    def __lt__(self, other):
-        return False
 
 # Find the manhattan distance (heuristic)
 def h(p1, p2):
@@ -120,11 +118,6 @@ def AStar(draw, grid, start, target):
 
     # Break if check all nodes and path doesn't exist
     while not setOpen.empty(): 
-        # If user want to quit
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-
         current = setOpen.get()[2]
         setOpenHash.remove(current)
 
@@ -167,91 +160,114 @@ def MakeGrid(rows, width):
     return grid
 
 # For drawing grid's line
-def DrawGrid(win, rows, width):
-    gap = width // rows
-    for i in range(rows):
-        pygame.draw.line(win, GRAY, (0, i * gap), (width, i * gap))
-        for j in range(rows):
-            pygame.draw.line(win, GRAY, (j * gap, 0), (j * gap, width))
+def DrawGrid(canvas, width):
+    gap = width // ROWS
+    for i in range(ROWS):
+        canvas.create_line(0, i* gap, width, i * gap, fill=GRAY)
+        canvas.create_line(i * gap, 0, i * gap, width, fill=GRAY)
 
 # Draw the grids
-def Draw(win, grid, rows, width):
-    win.fill(WHITE)
-    
+def Draw(canvas, grid, width):
+    canvas.delete("all")
+    gap = width // ROWS
+
     for row in grid:
         for node in row:
-            node.Draw(win)
+            x1 = node.col * gap
+            y1 = node.row * gap
+            x2 = x1 + gap
+            y2 = y1 + gap
+            canvas.create_rectangle(x1, y1, x2, y2, fill=node.color, outline="")
 
-    DrawGrid(win, rows, width)
-    pygame.display.update()
+    DrawGrid(canvas, width)
+    canvas.update()
 
 # Determine the position the mouse
-def GetClickedPos(pos, rows, width):
-    gap = width // rows
-    y, x = pos
-
-    row = y // gap
-    col = x // gap
-
+def GetClickedPos(event, width):
+    gap = width // ROWS
+    row = event.y // gap
+    col = event.x // gap
     return row, col
 
-def main(win, width):
-    ROWS = 50
-    grid = MakeGrid(ROWS, width)
+# When mouse is clicked on the grid
+def OnMouseClick(event):
+    global start, target, grid, canvas
+    row, col = GetClickedPos(event, WIDTH)
+    node = grid[row][col]
+    if not start and node != target:
+        start = node
+        start.MakeStart()
+    elif not target and node != start:
+        target = node
+        target.MakeTarget()
+    elif node != target and node != start:
+        node.MakeWall()
+    Draw(canvas, grid, WIDTH)
 
+# When user wants to remove a node
+def OnMouseRightClick(event):
+    global start, target, grid, canvas
+    row, col = GetClickedPos(event, WIDTH)
+    node = grid[row][col]
+    node.Reset()
+    if node == start:
+        start = None
+    elif node == target:
+        target = None
+    Draw(canvas, grid, WIDTH)
+
+# Allow user to hold the mouse down to place wall
+def OnMouseDrag(event):
+    global start, target, grid, canvas
+    row, col = GetClickedPos(event, WIDTH)
+    node = grid[row][col]
+    
+    if node != start and node != target and node.color != BLACK:
+        node.MakeWall()
+        node.Draw(canvas)
+        canvas.update()
+
+def OnMouseRelease(event):
+    Draw(canvas, grid, WIDTH)
+
+def OnKeyPress(event):
+    # When user wants to visualise the algorithm
+    global start, target, grid, canvas
+    if event.keysym == "space" and start and target:
+        for row in grid:
+            for node in row:
+                node.UpdateNeighbours(grid)
+        AStar(lambda: Draw(canvas, grid, WIDTH), grid, start, target)
+        Draw(canvas, grid, WIDTH)
+
+    # When user wants to clear the grid
+    elif event.char == "c":
+        start = None
+        target = None
+        grid = MakeGrid(ROWS, WIDTH)
+        Draw(canvas, grid, WIDTH)
+
+def main():
+    global canvas, start, target, grid
     start = None
     target = None
+    grid = MakeGrid(ROWS, WIDTH)
 
-    isRun = True
-    while isRun:
-        Draw(win, grid, ROWS, width)
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                isRun = False
-            
-            # Left click to change node's status
-            if pygame.mouse.get_pressed()[0]:
-                pos = pygame.mouse.get_pos()
-                row, col = GetClickedPos(pos, ROWS, width)
-                node = grid[row][col]
-                # Choose start node
-                if not start and node != target:
-                    start = node
-                    start.MakeStart()
+    root = tk.Tk()
+    root.title("Pathfinding Algorithm Visualiser")
 
-                # Choose target node
-                elif not target and node != start:
-                    target = node
-                    target.MakeTarget()
+    canvas = tk.Canvas(root, width=WIDTH, height=WIDTH)
+    canvas.pack()
 
-                # Choose wall node
-                elif node != target and node != start:
-                    node.MakeWall()
-            
-            # Right click to change node back to white
-            elif pygame.mouse.get_pressed()[2]:
-                pos = pygame.mouse.get_pos()
-                row, col = GetClickedPos(pos, ROWS, width)
-                node = grid[row][col]
-                node.Reset()
-                if node == start:
-                    start = None
-                elif node == target:
-                    target = None
+    canvas.bind("<Button-1>", OnMouseClick)
+    canvas.bind("<Button-3>", OnMouseRightClick)
+    canvas.bind("<B1-Motion>", OnMouseDrag)
+    canvas.bind("<ButtonRelease-1>", OnMouseRelease)
+    root.bind("<Key>", OnKeyPress)
 
-            if event.type == pygame.KEYDOWN:
-                # Run the algorithm
-                if event.key == pygame.K_SPACE and start and target:
-                    for row in grid:
-                        for node in row:
-                            node.UpdateNeighbours(grid)
+    Draw(canvas, grid, WIDTH)
 
-                    AStar(lambda: Draw(win, grid, ROWS, width), grid, start, target)
-                
-                # Clear the board
-                if event.key == pygame.K_c:
-                    start = None
-                    target = None
-                    grid = MakeGrid(ROWS, width)
-    pygame.quit()
-main(WIN, WIDTH)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
