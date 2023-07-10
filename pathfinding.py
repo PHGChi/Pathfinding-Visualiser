@@ -216,20 +216,6 @@ def OnMouseRightClick(event):
         target = None
     Draw(canvas, grid, WIDTH)
 
-# Allow user to hold the mouse down to place wall
-def OnMouseDrag(event):
-    global start, target, grid, canvas
-    row, col = GetClickedPos(event, WIDTH)
-    node = grid[row][col]
-    
-    if node != start and node != target and node.color != BLACK:
-        node.MakeWall()
-        node.Draw(canvas)
-        canvas.update()
-
-def OnMouseRelease(event):
-    Draw(canvas, grid, WIDTH)
-
 def OnKeyPress(event):
     # When user wants to visualise the algorithm
     global start, target, grid, canvas
@@ -261,8 +247,6 @@ def main():
 
     canvas.bind("<Button-1>", OnMouseClick)
     canvas.bind("<Button-3>", OnMouseRightClick)
-    canvas.bind("<B1-Motion>", OnMouseDrag)
-    canvas.bind("<ButtonRelease-1>", OnMouseRelease)
     root.bind("<Key>", OnKeyPress)
 
     Draw(canvas, grid, WIDTH)
