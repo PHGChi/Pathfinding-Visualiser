@@ -1,0 +1,14 @@
+# Colour coordinate node's colour
+RED = "#F65353"
+PURPLE = "#726FC8"
+GREEN = "#69B27A"
+BLUE = "#58B1FF"
+ORANGE = "#FFB347"
+WHITE = "#FFFFFF"
+BLACK = "#4C5270"
+GRAY = "#9B9B9B"
+
+WIDTH = 1200
+HEIGHT = 750
+ROWS = 50
+GAP = 15
