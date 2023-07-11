@@ -4,6 +4,8 @@ import sys
 sys.path.append(".")
 import time
 from Helper.GlobalVariables import *
+from Helper.ButtonHelper import Button
+from Helper.TextHelper import drawText, drawTextcenter
 from Grid.Node import Node
 from Grid.Grid import MakeGrid, DrawGrid, Draw, GetClickedPos
 from Algorithms.AStar import AStar
@@ -28,52 +30,55 @@ def main(win, width):
         for event in pygame.even.get():
             if event.type == pygame.QUIT:
                 run = False
+
+            #Insert in all the buttons
+            
             
             #When mouse is left clicked on the grid to change node's status
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 row, col = GetClickedPos(pos, ROWS, WIDTH)
-                node = grid[row][col]
+                if row < ROWS and col < ROWS: #Why do I need this
+                    node = grid[row][col]
+                    #Choose start node
+                    if not start and node != target:
+                        start = node
+                        start.MakeStart()
+                        
+                    #Choose target node
+                    elif not target and node != start:
+                        target = node
+                        target.MakeTarget()
+                        
+                    #Choose wall node
+                    elif node != target and node != start:
+                        node.MakeWall()
+                        
+                #When reset button is pressed
 
-                #Choose start node
-                if not start and node != target:
-                    start = node
-                    start.MakeStart()
+                #When start button is pressed
 
-                #Choose target node
-                elif not target and node != start:
-                    target = node
-                    target.MakeTarget()
-
-                #Choose wall node
-                elif node != target and node != start:
-                    node.MakeWall()
+                #Change button colour
                 
             #When mouse is right clicked on the grid to reset the node
             elif pygame.mouse.get_pressed()[2]:
                 pos = pygame.mouse.get_pos()
-                row, col = GetClickedPos(pos, ROWS, WIDTH)
-                node = grid[row][col]
-                node.Reset()
-                if node == start:
-                    start = None
-                elif node == target:
-                    target = None     
+                row, col = GetClickedPos(pos, ROWS, width)
+                if row < ROWS and col < ROWS:
+                    node = grid[row][col]
+                    node.Reset()
+                    #Reset start node
+                    if node == start:
+                        node.IsStart = -1 #What does this do
+                        start = None
+                    #Reset target node
+                    elif node == target:
+                        node.IsTarget = -1
+                        target = None     
                 
             #When the user is using a keyboard shortcut
             if event.type == pygame.KEYDOWN:
-                #Press space bar to run the algorithm
-                if event.key == pygame.K_SPACE and start and target:
-                    for row in grid:
-                        for node in row:
-                            node.UpdateNeighbours(grid)
-                                
-                    AStar(lambda: Draw(WIN, grid, ROWS, WIDTH), grid, start, target)
-                        
-                # When user wants to clear the grid
-                elif event.key == pygame.K_c:
-                    start = None
-                    target = None
-                    grid = MakeGrid(ROWS, WIDTH)
-    pygame.quit()
+                #When the user wants to escape the program
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
 main(WIN, WIDTH)

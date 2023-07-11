@@ -1,3 +1,5 @@
+from ButtonHelper import Button
+
 # Colour coordinate node's colour
 RED = "#F65353"
 PURPLE = "#726FC8"
@@ -7,8 +9,22 @@ ORANGE = "#FFB347"
 WHITE = "#FFFFFF"
 BLACK = "#4C5270"
 GRAY = "#9B9B9B"
+SELECTEDBUTTON = "#00A67E"
+UNSELECTEDBUTTON = "#4C5270"
 
 WIDTH = 1200
 HEIGHT = 750
 ROWS = 50
 GAP = 15
+
+btnStart = Button(825, 400, 150, 50, WHITE, UNSELECTEDBUTTON, "START")
+btnReset = Button(975, 400, 150, 50, WHITE, UNSELECTEDBUTTON, "RESET GRID")
+btnAStar = Button(825, 550, 150, 50, WHITE, UNSELECTEDBUTTON, "A*")
+btnBFS = Button(975, 550, 150, 50, WHITE, UNSELECTEDBUTTON, "BFS")
+btnDFS = Button(825, 650, 150, 50, WHITE, UNSELECTEDBUTTON, "DFS")
+btnBidirectional = Button(825, 600, 150, 50, WHITE, UNSELECTEDBUTTON, "BIDIRECTIONAL")
+btnDjikstra = Button(975, 600, 150, 50, WHITE, UNSELECTEDBUTTON, "DIJKSTRA")
+btnBestFirstSearch = Button(975, 650, 150, 50, WHITE, UNSELECTEDBUTTON, "BEST FIRST SEARCH")
+legendStart = Button(775, 275, 15, 15, BLACK, RED)
+legendTarget = Button(900, 275, 15, 15, BLACK, PURPLE)
+legendWall = Button(1025, 275, 15, 15, WHITE, BLACK)

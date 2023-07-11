@@ -1,5 +1,5 @@
 import pygame
-from Helper.GlobalVariables import *
+from ..Helper.GlobalVariables import *
 
 # For the status of node and colour of grids
 class Node:

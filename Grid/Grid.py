@@ -1,8 +1,8 @@
 import pygame
 import math
 import sys
-from Grid.Node import Node
-from Helper.GlobalVariables import *
+from Node import Node
+from ..Helper.GlobalVariables import *
 
 pygame.init()
 font = pygame.font.SysFont('Arial', GAP)
