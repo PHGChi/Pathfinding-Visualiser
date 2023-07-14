@@ -1,11 +1,10 @@
 import pygame
 import math
 import sys
-sys.path.append(".")
-import time
+sys.path.append('.')
 from Helper.GlobalVariables import *
 from Helper.ButtonHelper import Button
-from Helper.TextHelper import drawText, drawTextcenter
+from Helper.TextHelper import DrawText, DrawTextCenter
 from Grid.Node import Node
 from Grid.Grid import MakeGrid, DrawGrid, Draw, GetClickedPos
 from Algorithms.AStar import AStar
@@ -17,48 +16,80 @@ pygame.init()
 
 def main(win, width):
     grid = MakeGrid(ROWS, width)
-    allFonts = pygame.font.get_font() #What does this do
+    allFonts = pygame.font.get_fonts()
 
     start = None
-    tartget = None
+    target = None
     algID = 0
 
     run = True
     while run:
-        Draw(WIN, grid, ROWS, width, algID)
+        Draw(win, grid, ROWS, width, algID)
 
-        for event in pygame.even.get():
+        for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-            #Insert in all the buttons
-            
-            
+            #Change buttons colour based on whether they are selected or not
+            if btnAStar.Check() == True and algID != 0:
+                btnAStar.backgroundColour = SELECTEDBUTTON
+            else:
+                btnAStar.backgroundColour = UNSELECTEDBUTTON
+
+            if btnReset.Check() == True:
+                btnReset.backgroundColour = SELECTEDBUTTON
+            else:
+                btnReset.backgroundColour = UNSELECTEDBUTTON
+                
             #When mouse is left clicked on the grid to change node's status
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
-                row, col = GetClickedPos(pos, ROWS, WIDTH)
+                row, col = GetClickedPos(pos, ROWS, width)
                 if row < ROWS and col < ROWS: #Why do I need this
                     node = grid[row][col]
                     #Choose start node
                     if not start and node != target:
                         start = node
+                        start.IsStart = 1
                         start.MakeStart()
                         
                     #Choose target node
                     elif not target and node != start:
                         target = node
+                        target.IsTarget = 1
                         target.MakeTarget()
                         
                     #Choose wall node
                     elif node != target and node != start:
                         node.MakeWall()
                         
-                #When reset button is pressed
+                #Reset the grid when the rest button is checked
+                elif btnReset.check() == True:
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, width)
 
                 #When start button is pressed
+                if btnStart.Check() == True and start and target:
+                    for row in grid:
+                        for node in row:
+                            node.UpdateNeighbours(grid)
 
-                #Change button colour
+                    tempStart = start
+                    tempTarget = target
+
+                    #Run the AStar algorithm
+                    if(algID == 0):
+                        AStar(lambda: Draw(win, grid, ROWS, width, algID, 0), grid, start, target)
+
+                    tempStart.MakeStart()
+                    tempTarget.MakeTarget()
+
+                #Change algorithm status when user choose an algorithm
+                if btnAStar.Check() == True:
+                    algID = 0
+                else:
+                    btnAStar.backgroundColour = UNSELECTEDBUTTON
                 
             #When mouse is right clicked on the grid to reset the node
             elif pygame.mouse.get_pressed()[2]:

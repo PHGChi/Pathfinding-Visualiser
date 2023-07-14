@@ -1,9 +1,9 @@
 import pygame
-from ..Helper.GlobalVariables import *
+from Helper.GlobalVariables import *
 
 # For the status of node and colour of grids
 class Node:
-  def __init__(self, row, col, width, totalRows):
+  def __init__(self, row, col, width, totalRows, isVisited, distance, predecessor, isStart, isTarget):
     self.row = row
     self.col = col
     self.x = row * width
@@ -12,6 +12,11 @@ class Node:
     self.neighbours = []
     self.width = width
     self.totalRows = totalRows
+    self.isVisited = [0,0]
+    self.distance = distance
+    self.predecessor = [-1, -1]
+    self.isStart = isStart
+    self.isTarget = isTarget
 
   # Determine where the node is
   def GetPos(self):
@@ -54,6 +59,21 @@ class Node:
 
   def MakePath(self):
     self.color = ORANGE
+
+  def GetVisited(self):
+    return self.isVisited[0], self.isVisited[1]
+  
+  def GetDistance(self):
+    return self.distance
+  
+  def GetPredecessor(self):
+    return self.predecessor[0], self.predecessor[1]
+  
+  def GetStart(self):
+    return self.isStart
+  
+  def GetTarget(self):
+    return self.isTarget
     
   def Draw(self, win):
     pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.width))

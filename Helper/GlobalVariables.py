@@ -1,4 +1,4 @@
-from ButtonHelper import Button
+from Helper.ButtonHelper import Button
 
 # Colour coordinate node's colour
 RED = "#F65353"
@@ -25,6 +25,6 @@ btnDFS = Button(825, 650, 150, 50, WHITE, UNSELECTEDBUTTON, "DFS")
 btnBidirectional = Button(825, 600, 150, 50, WHITE, UNSELECTEDBUTTON, "BIDIRECTIONAL")
 btnDjikstra = Button(975, 600, 150, 50, WHITE, UNSELECTEDBUTTON, "DIJKSTRA")
 btnBestFirstSearch = Button(975, 650, 150, 50, WHITE, UNSELECTEDBUTTON, "BEST FIRST SEARCH")
-legendStart = Button(775, 275, 15, 15, BLACK, RED)
-legendTarget = Button(900, 275, 15, 15, BLACK, PURPLE)
-legendWall = Button(1025, 275, 15, 15, WHITE, BLACK)
+legendStart = Button(775, 275, 15, 15, BLACK, RED, " ")
+legendTarget = Button(900, 275, 15, 15, BLACK, PURPLE, " ")
+legendWall = Button(1025, 275, 15, 15, WHITE, BLACK, " ")
