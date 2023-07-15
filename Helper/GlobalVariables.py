@@ -14,17 +14,30 @@ UNSELECTEDBUTTON = "#4C5270"
 
 WIDTH = 1200
 HEIGHT = 750
-ROWS = 50
+ROWS = 70
 GAP = 15
 
-btnStart = Button(825, 400, 150, 50, WHITE, UNSELECTEDBUTTON, "START")
-btnReset = Button(975, 400, 150, 50, WHITE, UNSELECTEDBUTTON, "RESET GRID")
-btnAStar = Button(825, 550, 150, 50, WHITE, UNSELECTEDBUTTON, "A*")
-btnBFS = Button(975, 550, 150, 50, WHITE, UNSELECTEDBUTTON, "BFS")
-btnDFS = Button(825, 650, 150, 50, WHITE, UNSELECTEDBUTTON, "DFS")
-btnBidirectional = Button(825, 600, 150, 50, WHITE, UNSELECTEDBUTTON, "BIDIRECTIONAL")
-btnDjikstra = Button(975, 600, 150, 50, WHITE, UNSELECTEDBUTTON, "DIJKSTRA")
-btnBestFirstSearch = Button(975, 650, 150, 50, WHITE, UNSELECTEDBUTTON, "BEST FIRST SEARCH")
-legendStart = Button(775, 275, 15, 15, BLACK, RED, " ")
-legendTarget = Button(900, 275, 15, 15, BLACK, PURPLE, " ")
-legendWall = Button(1025, 275, 15, 15, WHITE, BLACK, " ")
+#Sidebar buttons
+lblTitle = Button(0, 0, 150, 60, WHITE, UNSELECTEDBUTTON, "PATHFINDING")
+dropAlgorithm = Button(0, 60, 150, 45, WHITE, UNSELECTEDBUTTON, "Algorithm: ")
+btnAStar = Button(0, 105, 150, 45, WHITE, UNSELECTEDBUTTON, "A*")
+btnDjikstra = Button(0, 150, 150, 45, WHITE, UNSELECTEDBUTTON, "Dijkstra")
+btnDFS = Button(0, 195, 150, 45, WHITE, UNSELECTEDBUTTON, "Depth First Search")
+dropWalls = Button(0, 240, 150, 45, WHITE, UNSELECTEDBUTTON, "Walls")
+dropExtraNodes= Button(0, 285, 150, 45, WHITE, UNSELECTEDBUTTON, "Extra Nodes")
+btnVisualise = Button(0, 330, 150, 45, WHITE, UNSELECTEDBUTTON, "Visualise")
+btnClearBoard = Button(0, 375, 150, 45, WHITE, UNSELECTEDBUTTON, "Clear Board")
+btnClearWall = Button(0, 420, 150, 45, WHITE, UNSELECTEDBUTTON, "Clear Walls")
+btnClearPath = Button(0, 465, 150, 45, WHITE, UNSELECTEDBUTTON, "Clear Path")
+dropSpeed = Button(0, 510, 150, 45, WHITE, UNSELECTEDBUTTON, "Speed: ")
+btnHelp = Button(0, 555, 150, 45, WHITE, UNSELECTEDBUTTON, "Help")
+
+#Legend symbols
+legendStart = Button(25, 608, 15, 15, BLACK, RED, "", border=True)
+legendTarget = Button(25, 628, 15, 15, BLACK, PURPLE, " ", border=True)
+legendPrelimary = Button(25, 648, 15, 15, BLACK, BLACK, " ", border=True)
+legendUnvisited = Button(25, 668, 15, 15, BLACK, WHITE, " ", border=True)
+legendVisited1 = Button(15, 688, 15, 15, BLACK, GREEN, " ", border=True)
+legendVisited2 = Button(35, 688, 15, 15, BLACK, BLUE, " ", border=True)
+legendPath = Button(25, 708, 15, 15, BLACK, ORANGE, " ", border=True)
+legendWall = Button(25, 728, 15, 15, BLACK, BLACK, " ", border=True)

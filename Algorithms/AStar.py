@@ -11,9 +11,8 @@ def h(p1, p2):
 def ReconstructPath(predecessor, current, draw):
     while current in predecessor:
       current = predecessor[current]
-      if not current.IsStart(): # Don't colour the start node
-        current.MakePath()
-        draw()
+      current.MakePath()
+      draw()
 
 # Implement A* Path Finding Algorithm
 def AStar(draw, grid, start, target):

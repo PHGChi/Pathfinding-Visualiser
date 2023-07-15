@@ -1,6 +1,5 @@
 import pygame
 import math
-import sys
 from Grid.Node import Node
 from Helper.GlobalVariables import *
 from Helper.TextHelper import DrawText, DrawTextCenter
@@ -8,39 +7,26 @@ from Helper.TextHelper import DrawText, DrawTextCenter
 pygame.init()
 font = pygame.font.SysFont('Arial', GAP)
 
-#Create grids to represent nodes
-def MakeGrid(rows, width):
+#Make the grids to represent nodes
+def MakeGrid(rows):
   grid = []
-  #gap = width // rows
-  gap = 15
+
   for i in range (rows):
     grid.append([])
     for j in range(rows):
-      node = Node(i, j, gap, rows, [0,0], math.inf, [-1,-1], -1, -1)
+      node = Node(i, j, GAP, rows, [0,0], math.inf, [-1,-1], -1, -1)
       grid[i].append(node)
     
   return grid
 
 #Initialise the grid's lines
-def DrawGrid(win, rows, width):
-  #gap = width // rows
-  gap = 15
-  for i in range(50):
-    pygame.draw.line(win, GRAY, (0, i * gap), (GAP*50 - 1, i * gap))
-    for j in range(50):
-       pygame.draw.line(win, GRAY, (j * gap, 0), (j * gap, GAP*50 - 1))
+def DrawGrid(win, rows):
+  for i in range(rows):
+    pygame.draw.line(win, GRAY, (150, i * GAP), (150 + GAP * rows - 1, i * GAP))
+    for j in range(rows):
+       pygame.draw.line(win, GRAY, (150 + j * GAP, 0), (150 + j * GAP, GAP * rows - 1))
 
-  #Draw the sidebar
-  for i in range(gap):
-    pygame.draw.line(win, RED, (ROWS*GAP, i), (WIDTH, i))
-    pygame.draw.line(win, RED, (ROWS*GAP, HEIGHT - GAP + i), (WIDTH, HEIGHT - GAP + i))
-    pygame.draw.line(win, RED, (ROWS*GAP, (int)(HEIGHT/2) + 100 + i), (WIDTH, (int)(HEIGHT/2) + 100 + i))
-    pygame.draw.line(win, RED, (ROWS*GAP, 7*GAP + 100 + i), (WIDTH, 7*GAP + 100 + i))
-    pygame.draw.line(win, RED, (ROWS*GAP, 14*GAP + 100 + i), (WIDTH, 14*GAP + 100 + i))
-    pygame.draw.line(win, RED, (WIDTH - GAP + i, 0), (WIDTH - GAP + i, GAP*50 - 1))
-    pygame.draw.line(win, RED, (ROWS*GAP + i, 0), (ROWS*GAP + i,GAP*50 -1))
-
-#Draw the grids
+#Draw everything on the screen
 def Draw(win, grid, rows, width, algID):
   win.fill(WHITE)
     
@@ -48,39 +34,45 @@ def Draw(win, grid, rows, width, algID):
     for node in row:
       node.Draw(win)
 
-      #Draw the start node
-      if node.isStart == 1:
-        node.MakeStart()
-        text = font.render(" ", True, BLACK)
-        textRect = text.get_rect(center = (node.row * GAP + (int)(GAP/2), node.col * GAP + (int)(GAP/2)))
-        win.blit(text, textRect)
-
-      #Draw the target node
-
-      #Draw the wall node
-
-      #Draw wall nodes around the grid acting as a barrier
-
-  DrawGrid(win, rows, width)
+  DrawGrid(win, rows)
   font1 = pygame.font.SysFont('script', 22)
 
   #Display the information regarding each algorithm
 
-  #Create the legend
-  font1 = pygame.font.SysFont('calibri', 40)
-  DrawTextCenter("Legend", font1, win, 960, 245, BLACK)
-  font1 = pygame.font.SysFont('calibri', 22)
-  DrawText("Start node", font1, win, 800, 275, BLACK)
-  DrawText("Target node", font1, win, 925, 275, BLACK)
-  DrawText("Wall node", font1, win, 1050, 275, BLACK)
-  DrawText("Pick an algorithm to compute shortest path:", font1, win, 785, 520, BLACK)
-
-  #Display everything
+  #Display the sidebar
+  lblTitle.Draw(win)
+  dropAlgorithm.Draw(win)
   btnAStar.Draw(win)
+  btnDjikstra.Draw(win)
   btnDFS.Draw(win)
+  dropWalls.Draw(win)
+  dropExtraNodes.Draw(win)
+  btnVisualise.Draw(win)
+  btnClearBoard.Draw(win)
+  btnClearWall.Draw(win)
+  btnClearPath.Draw(win)
+  dropSpeed.Draw(win)
+  btnHelp.Draw(win)
+
+  #Display the legend
   legendStart.Draw(win)
   legendTarget.Draw(win)
+  legendPrelimary.Draw(win)
+  legendUnvisited.Draw(win)
+  legendVisited1.Draw(win)
+  legendVisited2.Draw(win)
+  legendPath.Draw(win)
   legendWall.Draw(win)
+
+  #Display the legend's text (try to center this)
+  legendFont = pygame.font.SysFont('sans-serif', 14)
+  DrawText("Start Node", legendFont, win, legendStart.x + legendStart.width + 5, legendStart.y, BLACK)
+  DrawText("Target Node", legendFont, win, legendTarget.x + legendTarget.width + 5, legendTarget.y, BLACK)
+  DrawText("Prelimary Node", legendFont, win, legendPrelimary.x + legendPrelimary.width + 5, legendPrelimary.y, BLACK)
+  DrawText("Unvisited Node", legendFont, win, legendUnvisited.x + legendUnvisited.width + 5, legendUnvisited.y, BLACK)
+  DrawText("Visited Node", legendFont, win, legendVisited2.x + legendVisited2.width + 5, legendVisited2.y, BLACK)
+  DrawText("Path Node", legendFont, win, legendPath.x + legendPath.width + 5, legendPath.y, BLACK)
+  DrawText("Wall Node", legendFont, win, legendWall.x + legendWall.width + 5, legendWall.y, BLACK)
   pygame.display.update()
 
 
