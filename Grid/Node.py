@@ -3,18 +3,19 @@ from Helper.GlobalVariables import *
 
 # For the status of node and colour of grids
 class Node:
-  def __init__(self, row, col, width, totalRows, isVisited, distance, predecessor, isStart, isTarget):
+  def __init__(self, row, col, width, totalRows, totalCols, isVisited, distance, predecessor, isStart, isTarget):
     self.row = row
     self.col = col
-    self.x = row * width
+    self.x = row * width + SIDEBARWIDTH
     self.y = col * width
     self.color = WHITE
     self.neighbours = []
     self.width = width
     self.totalRows = totalRows
-    self.isVisited = [0,0]
+    self.totalCols = totalCols
+    self.isVisited = isVisited
     self.distance = distance
-    self.predecessor = [-1, -1]
+    self.predecessor = predecessor
     self.isStart = isStart
     self.isTarget = isTarget
 
@@ -90,7 +91,7 @@ class Node:
     if self.col > 0 and not grid[self.row][self.col - 1].IsWall(): # LEFT
       self.neighbours.append(grid[self.row][self.col - 1])
 
-    if self.col < self.totalRows - 1 and not grid[self.row][self.col + 1].IsWall(): # RIGHT
+    if self.col < self.totalCols - 1 and not grid[self.row][self.col + 1].IsWall(): # RIGHT
       self.neighbours.append(grid[self.row][self.col + 1])
     
   def __lt__(self, other):

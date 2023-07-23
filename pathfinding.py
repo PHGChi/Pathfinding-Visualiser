@@ -14,7 +14,7 @@ pygame.display.set_caption("Pathfinding Visualiser")
 pygame.init()
 
 def main(win, width):
-    grid = MakeGrid(ROWS)
+    grid = MakeGrid(ROWS, COLS)
     allFonts = pygame.font.get_fonts()
 
     start = None
@@ -26,77 +26,75 @@ def main(win, width):
         Draw(win, grid, ROWS, width, algID)
 
         for event in pygame.event.get():
-            #If user wants to exit the program
+            # If user wants to exit the program
             if event.type == pygame.QUIT:
                 run = False
 
-            #Change buttons colour based on whether they are selected or not
-            #Add this feature in the button class
+            # Change buttons colour based on whether they are selected or not
+            # Add this feature in the button class
             if dropAlgorithm.Check() == True:
-                dropAlgorithm.backgroundColour = SELECTEDBUTTON
+                dropAlgorithm.backgroundColour = DARKGREEN
             else:
-                dropAlgorithm.backgroundColour = UNSELECTEDBUTTON
-
+                dropAlgorithm.backgroundColour = BLACK
             if btnAStar.Check() == True:
-                btnAStar.backgroundColour = SELECTEDBUTTON
+                btnAStar.backgroundColour = DARKGREEN
             else:
-                btnAStar.backgroundColour = UNSELECTEDBUTTON
+                btnAStar.backgroundColour = BLACK
 
             if btnDjikstra.Check() == True:
-                btnDjikstra.backgroundColour = SELECTEDBUTTON
+                btnDjikstra.backgroundColour = DARKGREEN
             else:
-                btnDjikstra.backgroundColour = UNSELECTEDBUTTON
+                btnDjikstra.backgroundColour = BLACK
 
             if btnDFS.Check() == True:
-                btnDFS.backgroundColour = SELECTEDBUTTON
+                btnDFS.backgroundColour = DARKGREEN
             else:
-                btnDFS.backgroundColour = UNSELECTEDBUTTON
-
+                btnDFS.backgroundColour = BLACK
             if dropWalls.Check() == True:
-                dropWalls.backgroundColour = SELECTEDBUTTON
+                dropWalls.backgroundColour = DARKGREEN
             else:
-                dropWalls.backgroundColour = UNSELECTEDBUTTON
+                dropWalls.backgroundColour = BLACK
 
             if dropExtraNodes.Check() == True:
-                dropExtraNodes.backgroundColour = SELECTEDBUTTON
+                dropExtraNodes.backgroundColour = DARKGREEN
             else:
-                dropExtraNodes.backgroundColour = UNSELECTEDBUTTON
+                dropExtraNodes.backgroundColour = BLACK
 
             if btnVisualise.Check() == True:
-                btnVisualise.backgroundColour = SELECTEDBUTTON
+                btnVisualise.backgroundColour = DARKGREEN
             else:
-                btnVisualise.backgroundColour = UNSELECTEDBUTTON
+                btnVisualise.backgroundColour = BLACK
 
             if btnClearBoard.Check() == True:
-                btnClearBoard.backgroundColour = SELECTEDBUTTON
+                btnClearBoard.backgroundColour = DARKGREEN
             else:
-                btnClearBoard.backgroundColour = UNSELECTEDBUTTON
+                btnClearBoard.backgroundColour = BLACK
 
             if btnClearWall.Check() == True:
-                btnClearWall.backgroundColour = SELECTEDBUTTON
+                btnClearWall.backgroundColour = DARKGREEN
             else:
-                btnClearWall.backgroundColour = UNSELECTEDBUTTON
+                btnClearWall.backgroundColour = BLACK
 
             if btnClearPath.Check() == True:
-                btnClearPath.backgroundColour = SELECTEDBUTTON
+                btnClearPath.backgroundColour = DARKGREEN
             else:
-                btnClearPath.backgroundColour = UNSELECTEDBUTTON
+                btnClearPath.backgroundColour = BLACK
 
             if dropSpeed.Check() == True:
-                dropSpeed.backgroundColour = SELECTEDBUTTON
+                dropSpeed.backgroundColour = DARKGREEN
             else:
-                dropSpeed.backgroundColour = UNSELECTEDBUTTON
+                dropSpeed.backgroundColour = BLACK
 
             if btnHelp.Check() == True:
-                btnHelp.backgroundColour = SELECTEDBUTTON
+                btnHelp.backgroundColour = DARKGREEN
             else:
-                btnHelp.backgroundColour = UNSELECTEDBUTTON
+                btnHelp.backgroundColour = BLACK
                 
-            #When mouse is left clicked on the grid to change node's status
+            #When mouse is left clicked
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
-                row, col = GetClickedPos(pos, ROWS, width)
-                if row < ROWS and col < ROWS:
+                row, col = GetClickedPos(pos)
+                if row >= 0 and row < ROWS and col >= 0 and col < COLS:
                     node = grid[row][col]
                     #Choose start node
                     if not start and node != target:
@@ -114,14 +112,44 @@ def main(win, width):
                     elif node != target and node != start:
                         node.MakeWall()
                         
-                #Reset the grid when the rest button is checked
-                elif btnClearBoard.Check() == True:
-                    start = None
-                    target = None
-                    grid = MakeGrid(ROWS)
+                # Change the button's colour when the user click on it and run what the button is supposed to do
+                # Add this feature to the button class
+                if dropAlgorithm.Check() == True:
+                    dropAlgorithm.backgroundColour = GRAY
+                else:
+                    dropAlgorithm.backgroundColour = BLACK
 
-                #When start button is pressed
+                if btnAStar.Check() == True:
+                    btnAStar.backgroundColour = GRAY
+                    algID = 0 # Change algorithm to A*
+                else:
+                    btnAStar.backgroundColour = BLACK
+
+                if btnDjikstra.Check() == True:
+                    btnDjikstra.backgroundColour = GRAY
+                    algID = 0 # Change algorithm to Djikstra's
+                else:
+                    btnDjikstra.backgroundColour = BLACK
+
+                if btnDFS.Check() == True:
+                    btnDFS.backgroundColour = GRAY
+                    algID = 0 # Change algorithm to Depth First Search
+                else:
+                    btnDFS.backgroundColour = BLACK
+
+                if dropWalls.Check() == True:
+                    dropWalls.backgroundColour = GRAY
+                else:
+                    dropWalls.backgroundColour = BLACK
+
+                if dropExtraNodes.Check() == True:
+                    dropExtraNodes.backgroundColour = GRAY
+                else:
+                    dropExtraNodes.backgroundColour = BLACK
+
+                # Visualise the algorithm when the 'Visualise' button is pressed
                 if btnVisualise.Check() == True and start and target:
+                    btnVisualise.backgroundColour = GRAY
                     for row in grid:
                         for node in row:
                             node.UpdateNeighbours(grid)
@@ -129,88 +157,54 @@ def main(win, width):
                     tempStart = start
                     tempTarget = target
 
-                    #Run the AStar algorithm
+                    # Run the AStar algorithm
                     if(algID == 0):
                         AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
-                    #Run Dijkstra's algorithm
+                    # Run Dijkstra's algorithm
 
-                    #Run DFS algorithm
+                    # Run DFS algorithm
 
                     tempStart.MakeStart()
                     tempTarget.MakeTarget()
-
-                #Change algorithm status when user choose an algorithm
-                #Add this feature to the button class
-                if dropAlgorithm.Check() == True:
-                    dropAlgorithm.backgroundColour = GRAY
-                    algID = 0
                 else:
-                    dropAlgorithm.backgroundColour = UNSELECTEDBUTTON
+                    btnVisualise.backgroundColour = BLACK
 
-                if btnAStar.Check() == True:
-                    btnAStar.backgroundColour = GRAY
-                    algID = 0
-                else:
-                    btnAStar.backgroundColour = UNSELECTEDBUTTON
-
-                if btnDjikstra.Check() == True:
-                    btnDjikstra.backgroundColour = GRAY
-                    algID = 0 #Change this
-                else:
-                    btnDjikstra.backgroundColour = UNSELECTEDBUTTON
-
-                if btnDFS.Check() == True:
-                    btnDFS.backgroundColour = GRAY
-                    algID = 0 #Change this
-                else:
-                    btnDFS.backgroundColour = UNSELECTEDBUTTON
-
-                if dropWalls.Check() == True:
-                    dropWalls.backgroundColour = GRAY
-                else:
-                    dropWalls.backgroundColour = UNSELECTEDBUTTON
-
-                if dropExtraNodes.Check() == True:
-                    dropExtraNodes.backgroundColour = GRAY
-                else:
-                    dropExtraNodes.backgroundColour = UNSELECTEDBUTTON
-
-                if btnVisualise.Check() == True:
-                    btnVisualise.backgroundColour = GRAY
-                else:
-                    btnVisualise.backgroundColour = UNSELECTEDBUTTON
-
+                # Clear the board when the 'Clear Board' button is pressed
                 if btnClearBoard.Check() == True:
                     btnClearBoard.backgroundColour = GRAY
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
                 else:
-                    btnClearBoard.backgroundColour = UNSELECTEDBUTTON
+                    btnClearBoard.backgroundColour = BLACK
 
                 if btnClearWall.Check() == True:
                     btnClearWall.backgroundColour = GRAY
                 else:
-                    btnClearWall.backgroundColour = UNSELECTEDBUTTON
+                    btnClearWall.backgroundColour = BLACK
 
                 if btnClearPath.Check() == True:
                     btnClearPath.backgroundColour = GRAY
                 else:
-                    btnClearPath.backgroundColour = UNSELECTEDBUTTON
+                    btnClearPath.backgroundColour = BLACK
 
                 if dropSpeed.Check() == True:
                     dropSpeed.backgroundColour = GRAY
                 else:
-                    dropSpeed.backgroundColour = UNSELECTEDBUTTON
+                    dropSpeed.backgroundColour = BLACK
 
                 if btnHelp.Check() == True:
                     btnHelp.backgroundColour = GRAY
                 else:
-                    btnHelp.backgroundColour = UNSELECTEDBUTTON
+                    btnHelp.backgroundColour = BLACK
                 
-            #When mouse is right clicked on the grid to reset the node
+            #When mouse is right clicked
             elif pygame.mouse.get_pressed()[2]:
                 pos = pygame.mouse.get_pos()
-                row, col = GetClickedPos(pos, ROWS, width)
-                if row < ROWS and col < ROWS:
+                row, col = GetClickedPos(pos)
+
+                if row >= 0 and row < ROWS and col >= 0 and col < COLS:
                     node = grid[row][col]
                     node.Reset()
                     #Reset start node

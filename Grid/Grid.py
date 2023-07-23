@@ -8,13 +8,13 @@ pygame.init()
 font = pygame.font.SysFont('Arial', GAP)
 
 #Make the grids to represent nodes
-def MakeGrid(rows):
+def MakeGrid(rows, cols):
   grid = []
 
   for i in range (rows):
     grid.append([])
-    for j in range(rows):
-      node = Node(i, j, GAP, rows, [0,0], math.inf, [-1,-1], -1, -1)
+    for j in range(cols):
+      node = Node(i, j, GAP, rows, cols, [0,0], math.inf, [-1,-1], -1, -1)
       grid[i].append(node)
     
   return grid
@@ -22,11 +22,11 @@ def MakeGrid(rows):
 #Initialise the grid's lines
 def DrawGrid(win, rows):
   for i in range(rows):
-    pygame.draw.line(win, GRAY, (150, i * GAP), (150 + GAP * rows - 1, i * GAP))
+    pygame.draw.line(win, GRAY, (SIDEBARWIDTH, i * GAP), (SIDEBARWIDTH + GAP * rows - 1, i * GAP))
     for j in range(rows):
-       pygame.draw.line(win, GRAY, (150 + j * GAP, 0), (150 + j * GAP, GAP * rows - 1))
+       pygame.draw.line(win, GRAY, (SIDEBARWIDTH + j * GAP, 0), (SIDEBARWIDTH + j * GAP, GAP * rows - 1))
 
-#Draw everything on the screen
+# Draw everything on the screen
 def Draw(win, grid, rows, width, algID):
   win.fill(WHITE)
     
@@ -35,7 +35,6 @@ def Draw(win, grid, rows, width, algID):
       node.Draw(win)
 
   DrawGrid(win, rows)
-  font1 = pygame.font.SysFont('script', 22)
 
   #Display the information regarding each algorithm
 
@@ -77,12 +76,10 @@ def Draw(win, grid, rows, width, algID):
 
 
 # Determine the position the mouse
-def GetClickedPos(pos, rows, width):
-  #gap = width // rows
-  gap = 15
-  y, x = pos
+def GetClickedPos(pos):
+  x, y = pos
 
-  row = y // gap
-  col = x // gap
+  row = (x - SIDEBARWIDTH) // GAP
+  col = y // GAP
 
   return row, col
