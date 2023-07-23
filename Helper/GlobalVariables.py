@@ -20,13 +20,13 @@ SIDEBARWIDTH = 150
 
 #Sidebar buttons
 lblTitle = Button(0, 0, 150, 60, WHITE, BLACK, "PATHFINDING")
-dropAlgorithm = Button(0, 60, 150, 45, WHITE, BLACK, "Algorithm: ")
+dropAlgorithm = Button(0, 60, 150, 45, WHITE, BLACK, "Algorithm: A*")
 btnAStar = Button(0, 105, 150, 45, WHITE, BLACK, "A*")
 btnDjikstra = Button(0, 150, 150, 45, WHITE, BLACK, "Dijkstra")
 btnDFS = Button(0, 195, 150, 45, WHITE, BLACK, "Depth First Search")
 dropWalls = Button(0, 240, 150, 45, WHITE, BLACK, "Walls")
 dropExtraNodes= Button(0, 285, 150, 45, WHITE, BLACK, "Extra Nodes")
-btnVisualise = Button(0, 330, 150, 45, WHITE, BLACK, "Visualise")
+btnVisualise = Button(0, 330, 150, 45, WHITE, GREEN, "Visualise")
 btnClearBoard = Button(0, 375, 150, 45, WHITE, BLACK, "Clear Board")
 btnClearWall = Button(0, 420, 150, 45, WHITE, BLACK, "Clear Walls")
 btnClearPath = Button(0, 465, 150, 45, WHITE, BLACK, "Clear Path")

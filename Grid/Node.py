@@ -8,7 +8,7 @@ class Node:
     self.col = col
     self.x = row * width + SIDEBARWIDTH
     self.y = col * width
-    self.color = WHITE
+    self.colour = WHITE
     self.neighbours = []
     self.width = width
     self.totalRows = totalRows
@@ -25,41 +25,41 @@ class Node:
     
   # Check the colour of nodes to check its status
   def IsClosed(self):
-    return self.color == BLUE
+    return self.colour == BLUE
     
   def IsOpen(self):
-    return self.color == GREEN
+    return self.colour == GREEN
     
   def IsWall(self):
-    return self.color == BLACK
+    return self.colour == BLACK
     
   def IsStart(self):
-    return self.color == RED
+    return self.colour == RED
     
   def IsTarget(self):
-    return self.color == PURPLE
+    return self.colour == PURPLE
     
   # Changing node's colour
   def Reset(self):
-    self.color = WHITE
+    self.colour = WHITE
 
   def MakeClosed (self):
-    self.color = BLUE
+    self.colour = BLUE
 
   def MakeOpen(self):
-    self.color = GREEN
+    self.colour = GREEN
 
   def MakeWall(self):
-    self.color = BLACK
+    self.colour = BLACK
 
   def MakeStart(self):
-    self.color = RED
+    self.colour = RED
 
   def MakeTarget(self):
-    self.color = PURPLE
+    self.colour = PURPLE
 
   def MakePath(self):
-    self.color = ORANGE
+    self.colour = ORANGE
 
   def GetVisited(self):
     return self.isVisited[0], self.isVisited[1]
@@ -77,7 +77,7 @@ class Node:
     return self.isTarget
     
   def Draw(self, win):
-    pygame.draw.rect(win, self.color, (self.x, self.y, self.width, self.width))
+    pygame.draw.rect(win, self.colour, (self.x, self.y, self.width, self.width))
 
   # Check for neighbours that are not wall nodes or outside of grid
   def UpdateNeighbours(self, grid):

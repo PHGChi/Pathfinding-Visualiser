@@ -16,7 +16,6 @@ pygame.init()
 
 def main(win, width):
     grid = MakeGrid(ROWS, COLS)
-    allFonts = pygame.font.get_fonts()
 
     start = None
     target = None
@@ -60,11 +59,6 @@ def main(win, width):
                 dropExtraNodes.backgroundColour = DARKGREEN
             else:
                 dropExtraNodes.backgroundColour = BLACK
-
-            if btnVisualise.Check() == True:
-                btnVisualise.backgroundColour = DARKGREEN
-            else:
-                btnVisualise.backgroundColour = BLACK
 
             if btnClearBoard.Check() == True:
                 btnClearBoard.backgroundColour = DARKGREEN
@@ -123,12 +117,14 @@ def main(win, width):
                 if btnAStar.Check() == True:
                     btnAStar.backgroundColour = GRAY
                     algID = 0 # Change algorithm to A*
+                    dropAlgorithm.UpdateText("Algorithm: A*")
                 else:
                     btnAStar.backgroundColour = BLACK
 
                 if btnDjikstra.Check() == True:
                     btnDjikstra.backgroundColour = GRAY
                     algID = 1 # Change algorithm to Djikstra's
+                    dropAlgorithm.UpdateText("Algorithm: Dijkstra's")
                 else:
                     btnDjikstra.backgroundColour = BLACK
 
@@ -149,46 +145,65 @@ def main(win, width):
                     dropExtraNodes.backgroundColour = BLACK
 
                 # Visualise the algorithm when the 'Visualise' button is pressed
-                if btnVisualise.Check() == True and start and target:
-                    btnVisualise.backgroundColour = GRAY
-                    for row in grid:
-                        for node in row:
-                            node.UpdateNeighbours(grid)
+                if btnVisualise.Check() == True:
+                    btnVisualise.backgroundColour = GRAY 
+                    # Check for start and target node
+                    if not start:
+                        btnVisualise.backgroundColour = RED
+                        btnVisualise.UpdateText("Needs start node")
+                    elif not target:
+                        btnVisualise.backgroundColour = RED
+                        btnVisualise.UpdateText("Needs target node")
+                    else:
+                        for row in grid:
+                            for node in row:
+                                node.UpdateNeighbours(grid)
 
-                    tempStart = start
-                    tempTarget = target
+                        tempStart = start
+                        tempTarget = target
 
-                    # Run the AStar algorithm
-                    if(algID == 0):
-                        AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+                        # Run the AStar algorithm
+                        if(algID == 0):
+                            AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
-                    # Run Dijkstra's algorithm
-                    if(algID == 1):
-                        Dijkstra(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+                        # Run Dijkstra's algorithm
+                        if(algID == 1):
+                            Dijkstra(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
-                    # Run DFS algorithm
+                        # Run DFS algorithm
 
-                    tempStart.MakeStart()
-                    tempTarget.MakeTarget()
+                        tempStart.MakeStart()
+                        tempTarget.MakeTarget()
                 else:
-                    btnVisualise.backgroundColour = BLACK
+                    btnVisualise.backgroundColour = GREEN
+                    btnVisualise.UpdateText("Visualise") # Reset button back to "Visualise"
 
                 # Clear the board when the 'Clear Board' button is pressed
                 if btnClearBoard.Check() == True:
-                    btnClearBoard.backgroundColour = GRAY
+                    btnClearBoard.backgroundColour = GRAY 
                     start = None
                     target = None
                     grid = MakeGrid(ROWS, COLS)
                 else:
                     btnClearBoard.backgroundColour = BLACK
 
+                # Clear the wall nodes when the 'Clear Wall' button is pressed
                 if btnClearWall.Check() == True:
                     btnClearWall.backgroundColour = GRAY
+                    for row in grid:
+                        for node in row:
+                            if node.IsWall():
+                                node.Reset()
                 else:
                     btnClearWall.backgroundColour = BLACK
 
+                # Clear the path and visited nodes when the 'Clear Path' button is pressed
                 if btnClearPath.Check() == True:
                     btnClearPath.backgroundColour = GRAY
+                    for row in grid:
+                        for node in row:
+                            if node.IsClosed() or node.IsOpen() or node.colour == ORANGE:
+                                node.Reset()
                 else:
                     btnClearPath.backgroundColour = BLACK
 

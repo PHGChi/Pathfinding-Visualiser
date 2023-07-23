@@ -15,19 +15,23 @@ class Button(object):
         self.border = border
         self.angle = 0
 
-    #Check whether the mouse cursor is currently over the button
+    # Check whether the mouse cursor is currently over the button
     def Check(self):
         return self.rect.collidepoint(pygame.mouse.get_pos())
     
-    #Draw the buttons
+        # Updating button's text
+    def UpdateText(self, newText):
+        self.text = newText
+    
+    # Draw the buttons
     def Draw(self, WIN):
         borderColour = "#9B9B9B" #Fix this
         pygame.draw.rect(WIN, self.backgroundColour, (self.rect), 0)
 
         if self.border:
-            pygame.draw.rect(WIN, borderColour, (self.rect), 1) #Draw border
+            pygame.draw.rect(WIN, borderColour, (self.rect), 1) # Draw border
         
-        if self.text == "PATHFINDING": #Set font for the heading
+        if self.text == "PATHFINDING": # Set font for the heading
             font = pygame.font.SysFont('sans-serif', 24)
         else:
             font = pygame.font.SysFont('sans-serif', 20)
