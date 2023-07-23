@@ -14,7 +14,7 @@ def MakeGrid(rows, cols):
   for i in range (rows):
     grid.append([])
     for j in range(cols):
-      node = Node(i, j, GAP, rows, cols, [0,0], math.inf, [-1,-1], -1, -1)
+      node = Node(i, j, GAP, rows, cols, [0,0], math.inf, [-1, -1], -1, -1)
       grid[i].append(node)
     
   return grid

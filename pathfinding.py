@@ -7,6 +7,7 @@ from Helper.TextHelper import DrawText, DrawTextCenter
 from Grid.Node import Node
 from Grid.Grid import MakeGrid, Draw, GetClickedPos
 from Algorithms.AStar import AStar
+from Algorithms.Dijkstras import Dijkstra
 
 # Set the display
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -90,25 +91,25 @@ def main(win, width):
             else:
                 btnHelp.backgroundColour = BLACK
                 
-            #When mouse is left clicked
+            # When mouse is left clicked
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
                 row, col = GetClickedPos(pos)
                 if row >= 0 and row < ROWS and col >= 0 and col < COLS:
                     node = grid[row][col]
-                    #Choose start node
+                    # Choose start node
                     if not start and node != target:
                         start = node
                         start.IsStart = 1
                         start.MakeStart()
                         
-                    #Choose target node
+                    # Choose target node
                     elif not target and node != start:
                         target = node
                         target.IsTarget = 1
                         target.MakeTarget()
                         
-                    #Choose wall node
+                    # Choose wall node
                     elif node != target and node != start:
                         node.MakeWall()
                         
@@ -127,7 +128,7 @@ def main(win, width):
 
                 if btnDjikstra.Check() == True:
                     btnDjikstra.backgroundColour = GRAY
-                    algID = 0 # Change algorithm to Djikstra's
+                    algID = 1 # Change algorithm to Djikstra's
                 else:
                     btnDjikstra.backgroundColour = BLACK
 
@@ -162,6 +163,8 @@ def main(win, width):
                         AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                     # Run Dijkstra's algorithm
+                    if(algID == 1):
+                        Dijkstra(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                     # Run DFS algorithm
 

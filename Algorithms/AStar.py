@@ -1,8 +1,8 @@
 import pygame
 from queue import PriorityQueue
 
-# Find the manhattan distance (heuristic)
-def h(p1, p2):
+# Find the manhattan distance as the heuristic
+def Heuristic(p1, p2):
   x1, y1 = p1
   x2, y2 = p2
   return abs(x1 - x2) + abs(y1 - y2)
@@ -23,12 +23,11 @@ def AStar(draw, grid, start, target):
   gScore = {node: float("inf") for row in grid for node in row} # Keep track of current distance from start node to current node
   gScore[start] = 0
   fScore = {node: float("inf") for row in grid for node in row} # Keep track of predicted distance from current node to end node
-  fScore[start] = h(start.GetPos(), target.GetPos())
+  fScore[start] = Heuristic(start.GetPos(), target.GetPos())
   
-  setOpenHash = {start} # Check if anything is in the priority queue
+  setOpenHash = {start}
 
-  # Break if check all nodes and path doesn't exist
-  while not setOpen.empty(): 
+  while not setOpen.empty(): # Break when there is no path from start to end node
     # If user want to quit
     for event in pygame.event.get():
       if event.type == pygame.QUIT:
@@ -43,15 +42,15 @@ def AStar(draw, grid, start, target):
       target.MakeTarget()
       return True
         
-    # Consider neighbour nodes to find target node
+    # Consider neighbour nodes of current node
     for neighbour in current.neighbours:
       tempGScore = gScore[current] + 1
       
-      # When a better path is found
+      # Relax nodes when better distance is found
       if tempGScore < gScore[neighbour]:
         predecessor[neighbour] = current
         gScore[neighbour] = tempGScore
-        fScore[neighbour] = tempGScore + h(neighbour.GetPos(), target.GetPos())
+        fScore[neighbour] = tempGScore + Heuristic(neighbour.GetPos(), target.GetPos())
         if neighbour not in setOpenHash:
           count += 1
           setOpen.put((fScore[neighbour], count, neighbour))
