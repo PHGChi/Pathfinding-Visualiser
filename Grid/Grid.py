@@ -36,22 +36,9 @@ def Draw(win, grid, rows, width, algID):
 
   DrawGrid(win, rows)
 
-  #Display the information regarding each algorithm
-
-  #Display the sidebar
-  lblTitle.Draw(win)
-  dropAlgorithm.Draw(win)
-  btnAStar.Draw(win)
-  btnDjikstra.Draw(win)
-  btnDFS.Draw(win)
-  dropWalls.Draw(win)
-  dropExtraNodes.Draw(win)
-  btnVisualise.Draw(win)
-  btnClearBoard.Draw(win)
-  btnClearWall.Draw(win)
-  btnClearPath.Draw(win)
-  dropSpeed.Draw(win)
-  btnHelp.Draw(win)
+  # Draw all visible buttons
+  for button in sidebarButtons:
+    button.Draw(win)
 
   #Display the legend
   legendStart.Draw(win)

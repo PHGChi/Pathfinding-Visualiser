@@ -8,6 +8,9 @@ from Grid.Node import Node
 from Grid.Grid import MakeGrid, Draw, GetClickedPos
 from Algorithms.AStar import AStar
 from Algorithms.Dijkstras import Dijkstra
+from Algorithms.DFS import DFS
+from Algorithms.BFS import BFS
+from Algorithms.BestFS import BestFS
 
 # Set the display
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -36,6 +39,7 @@ def main(win, width):
                 dropAlgorithm.backgroundColour = DARKGREEN
             else:
                 dropAlgorithm.backgroundColour = BLACK
+
             if btnAStar.Check() == True:
                 btnAStar.backgroundColour = DARKGREEN
             else:
@@ -50,6 +54,17 @@ def main(win, width):
                 btnDFS.backgroundColour = DARKGREEN
             else:
                 btnDFS.backgroundColour = BLACK
+
+            if btnBFS.Check() == True:
+                btnBFS.backgroundColour = DARKGREEN
+            else:
+                btnBFS.backgroundColour = BLACK
+
+            if btnBestFS.Check() == True:
+                btnBestFS.backgroundColour = DARKGREEN
+            else:
+                btnBestFS.backgroundColour = BLACK
+
             if dropWalls.Check() == True:
                 dropWalls.backgroundColour = DARKGREEN
             else:
@@ -114,25 +129,45 @@ def main(win, width):
                 else:
                     dropAlgorithm.backgroundColour = BLACK
 
+                # Change algorithm to A*
                 if btnAStar.Check() == True:
                     btnAStar.backgroundColour = GRAY
-                    algID = 0 # Change algorithm to A*
+                    algID = 0 
                     dropAlgorithm.UpdateText("Algorithm: A*")
                 else:
                     btnAStar.backgroundColour = BLACK
 
+                # Change algorithm to Djikstra's
                 if btnDjikstra.Check() == True:
                     btnDjikstra.backgroundColour = GRAY
-                    algID = 1 # Change algorithm to Djikstra's
+                    algID = 1 
                     dropAlgorithm.UpdateText("Algorithm: Dijkstra's")
                 else:
                     btnDjikstra.backgroundColour = BLACK
 
+                # Change algorithm to Depth First Search
                 if btnDFS.Check() == True:
                     btnDFS.backgroundColour = GRAY
-                    algID = 0 # Change algorithm to Depth First Search
+                    algID = 2
+                    dropAlgorithm.UpdateText("Algorithm: DFS")
                 else:
                     btnDFS.backgroundColour = BLACK
+
+                # Change algorithm to Breadth First Search
+                if btnBFS.Check() == True:
+                    btnBFS.backgroundColour = GRAY
+                    algID = 3 
+                    dropAlgorithm.UpdateText("Algorithm: BFS")
+                else:
+                    btnBFS.backgroundColour = BLACK
+
+                # Change algorithm to Best First Search
+                if btnBestFS.Check() == True:
+                    btnBestFS.backgroundColour = GRAY
+                    algID = 4 
+                    dropAlgorithm.UpdateText("Algorithm: Best FS")
+                else:
+                    btnBestFS.backgroundColour = BLACK
 
                 if dropWalls.Check() == True:
                     dropWalls.backgroundColour = GRAY
@@ -146,7 +181,12 @@ def main(win, width):
 
                 # Visualise the algorithm when the 'Visualise' button is pressed
                 if btnVisualise.Check() == True:
-                    btnVisualise.backgroundColour = GRAY 
+                    # Clear previous path & visited nodes
+                    for row in grid:
+                        for node in row:
+                            if node.IsClosed() or node.IsOpen() or node.colour == ORANGE:
+                                node.Reset()
+
                     # Check for start and target node
                     if not start:
                         btnVisualise.backgroundColour = RED
@@ -155,6 +195,7 @@ def main(win, width):
                         btnVisualise.backgroundColour = RED
                         btnVisualise.UpdateText("Needs target node")
                     else:
+                        btnVisualise.backgroundColour = GRAY 
                         for row in grid:
                             for node in row:
                                 node.UpdateNeighbours(grid)
@@ -165,13 +206,26 @@ def main(win, width):
                         # Run the AStar algorithm
                         if(algID == 0):
                             AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
-
                         # Run Dijkstra's algorithm
-                        if(algID == 1):
+                        elif(algID == 1):
                             Dijkstra(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                         # Run DFS algorithm
+                        elif(algID == 2):
+                            path = []
+                            visited = []
+                            DFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target, path, visited)
+                        # Run BFS algorithm
+                        elif(algID == 3):
+                            print("BFS")
+                            BFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
+                        # Run Best FS algorithnm
+                        elif(algID == 4):
+                            print("Best FS")
+                            BestFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+
+                        # Reset start and target node after algorithm has been visualised
                         tempStart.MakeStart()
                         tempTarget.MakeTarget()
                 else:
@@ -217,7 +271,7 @@ def main(win, width):
                 else:
                     btnHelp.backgroundColour = BLACK
                 
-            #When mouse is right clicked
+            # When mouse is right clicked
             elif pygame.mouse.get_pressed()[2]:
                 pos = pygame.mouse.get_pos()
                 row, col = GetClickedPos(pos)
@@ -225,18 +279,19 @@ def main(win, width):
                 if row >= 0 and row < ROWS and col >= 0 and col < COLS:
                     node = grid[row][col]
                     node.Reset()
-                    #Reset start node
+                    # Reset start node
                     if node == start:
                         node.IsStart = - 1
                         start = None
-                    #Reset target node
+                    # Reset target node
                     elif node == target:
                         node.IsTarget = - 1
                         target = None     
                 
-            #When the user is using a keyboard shortcut
+            # When the user is using a keyboard shortcut
             if event.type == pygame.KEYDOWN:
-                #When the user wants to escape the program
+                # When the user wants to escape the program
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+                    
 main(WIN, WIDTH)

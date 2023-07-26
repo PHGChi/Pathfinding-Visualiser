@@ -13,23 +13,28 @@ class Button(object):
         self.textColour = textColour
         self.backgroundColour = backgroundColour
         self.border = border
-        self.angle = 0
+        self.visible = True
 
     # Check whether the mouse cursor is currently over the button
     def Check(self):
         return self.rect.collidepoint(pygame.mouse.get_pos())
     
-        # Updating button's text
+    # Updating button's text
     def UpdateText(self, newText):
         self.text = newText
     
     # Draw the buttons
     def Draw(self, WIN):
-        borderColour = "#9B9B9B" #Fix this
+        # Skip drawing if button is outside the sidebar
+        if not self.visible:
+            return
+        
+        borderColour = "#9B9B9B"
         pygame.draw.rect(WIN, self.backgroundColour, (self.rect), 0)
 
+        # Draw border for legend symbols
         if self.border:
-            pygame.draw.rect(WIN, borderColour, (self.rect), 1) # Draw border
+            pygame.draw.rect(WIN, borderColour, (self.rect), 1) 
         
         if self.text == "PATHFINDING": # Set font for the heading
             font = pygame.font.SysFont('sans-serif', 24)
