@@ -36,14 +36,28 @@ def Draw(win, grid, rows, width, algID):
 
   DrawGrid(win, rows)
 
-  # Draw all visible buttons
-  for button in sidebarButtons:
-    button.Draw(win)
+  #Display the sidebar
+  lblTitle.Draw(win)
+  lblAlgorithm.Draw(win)
+  btnAStar.Draw(win)
+  btnDjikstra.Draw(win)
+  btnDFS.Draw(win)
+  btnBFS.Draw(win)
+  lblMaze.Draw(win)
+  btnRecursiveDivsion.Draw(win)
+  btnPrims.Draw(win)
+  btnKruskal.Draw(win)
+  btnRandom.Draw(win)
+  btnVisualise.Draw(win)
+  btnClearBoard.Draw(win)
+  btnClearWall.Draw(win)
+  btnClearPath.Draw(win)
+  btnHelp.Draw(win)
 
   #Display the legend
+  lblLegend.Draw(win)
   legendStart.Draw(win)
   legendTarget.Draw(win)
-  legendPrelimary.Draw(win)
   legendUnvisited.Draw(win)
   legendVisited1.Draw(win)
   legendVisited2.Draw(win)
@@ -54,7 +68,6 @@ def Draw(win, grid, rows, width, algID):
   legendFont = pygame.font.SysFont('sans-serif', 14)
   DrawText("Start Node", legendFont, win, legendStart.x + legendStart.width + 5, legendStart.y, BLACK)
   DrawText("Target Node", legendFont, win, legendTarget.x + legendTarget.width + 5, legendTarget.y, BLACK)
-  DrawText("Prelimary Node", legendFont, win, legendPrelimary.x + legendPrelimary.width + 5, legendPrelimary.y, BLACK)
   DrawText("Unvisited Node", legendFont, win, legendUnvisited.x + legendUnvisited.width + 5, legendUnvisited.y, BLACK)
   DrawText("Visited Node", legendFont, win, legendVisited2.x + legendVisited2.width + 5, legendVisited2.y, BLACK)
   DrawText("Path Node", legendFont, win, legendPath.x + legendPath.width + 5, legendPath.y, BLACK)
@@ -70,3 +83,4 @@ def GetClickedPos(pos):
   col = y // GAP
 
   return row, col
+

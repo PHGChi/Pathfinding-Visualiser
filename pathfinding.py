@@ -6,11 +6,9 @@ from Helper.ButtonHelper import Button
 from Helper.TextHelper import DrawText, DrawTextCenter
 from Grid.Node import Node
 from Grid.Grid import MakeGrid, Draw, GetClickedPos
+from Grid.Maze import generate_maze_recursive_division
 from Algorithms.AStar import AStar
 from Algorithms.Dijkstras import Dijkstra
-from Algorithms.DFS import DFS
-from Algorithms.BFS import BFS
-from Algorithms.BestFS import BestFS
 
 # Set the display
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -35,11 +33,6 @@ def main(win, width):
 
             # Change buttons colour based on whether they are selected or not
             # Add this feature in the button class
-            if dropAlgorithm.Check() == True:
-                dropAlgorithm.backgroundColour = DARKGREEN
-            else:
-                dropAlgorithm.backgroundColour = BLACK
-
             if btnAStar.Check() == True:
                 btnAStar.backgroundColour = DARKGREEN
             else:
@@ -60,20 +53,25 @@ def main(win, width):
             else:
                 btnBFS.backgroundColour = BLACK
 
-            if btnBestFS.Check() == True:
-                btnBestFS.backgroundColour = DARKGREEN
+            if btnRecursiveDivsion.Check() == True:
+                btnRecursiveDivsion.backgroundColour = DARKGREEN
             else:
-                btnBestFS.backgroundColour = BLACK
+                btnRecursiveDivsion.backgroundColour = BLACK
+            
+            if btnPrims.Check() == True:
+                btnPrims.backgroundColour = DARKGREEN
+            else:
+                btnPrims.backgroundColour = BLACK
 
-            if dropWalls.Check() == True:
-                dropWalls.backgroundColour = DARKGREEN
+            if btnKruskal.Check() == True:
+                btnKruskal.backgroundColour = DARKGREEN
             else:
-                dropWalls.backgroundColour = BLACK
+                btnKruskal.backgroundColour = BLACK
 
-            if dropExtraNodes.Check() == True:
-                dropExtraNodes.backgroundColour = DARKGREEN
+            if btnRandom.Check() == True:
+                btnRandom.backgroundColour = DARKGREEN
             else:
-                dropExtraNodes.backgroundColour = BLACK
+                btnRandom.backgroundColour = BLACK
 
             if btnClearBoard.Check() == True:
                 btnClearBoard.backgroundColour = DARKGREEN
@@ -89,17 +87,14 @@ def main(win, width):
                 btnClearPath.backgroundColour = DARKGREEN
             else:
                 btnClearPath.backgroundColour = BLACK
-
-            if dropSpeed.Check() == True:
-                dropSpeed.backgroundColour = DARKGREEN
-            else:
-                dropSpeed.backgroundColour = BLACK
-
+            
             if btnHelp.Check() == True:
-                btnHelp.backgroundColour = DARKGREEN
+                btnHelp.textColour = GRAY
+                btnHelp.borderColour = GRAY
             else:
-                btnHelp.backgroundColour = BLACK
-                
+                btnHelp.textColour = BLACK
+                btnHelp.borderColour = BLACK
+        
             # When mouse is left clicked
             if pygame.mouse.get_pressed()[0]:
                 pos = pygame.mouse.get_pos()
@@ -124,69 +119,63 @@ def main(win, width):
                         
                 # Change the button's colour when the user click on it and run what the button is supposed to do
                 # Add this feature to the button class
-                if dropAlgorithm.Check() == True:
-                    dropAlgorithm.backgroundColour = GRAY
-                else:
-                    dropAlgorithm.backgroundColour = BLACK
-
-                # Change algorithm to A*
                 if btnAStar.Check() == True:
                     btnAStar.backgroundColour = GRAY
-                    algID = 0 
-                    dropAlgorithm.UpdateText("Algorithm: A*")
+                    algID = 0 # Change algorithm to A*
+                    lblAlgorithm.UpdateText("Algorithm: A*")
                 else:
                     btnAStar.backgroundColour = BLACK
 
-                # Change algorithm to Djikstra's
                 if btnDjikstra.Check() == True:
                     btnDjikstra.backgroundColour = GRAY
-                    algID = 1 
-                    dropAlgorithm.UpdateText("Algorithm: Dijkstra's")
+                    algID = 1 # Change algorithm to Djikstra's
+                    lblAlgorithm.UpdateText("Algorithm: Dijkstra's")
                 else:
                     btnDjikstra.backgroundColour = BLACK
 
-                # Change algorithm to Depth First Search
                 if btnDFS.Check() == True:
                     btnDFS.backgroundColour = GRAY
-                    algID = 2
-                    dropAlgorithm.UpdateText("Algorithm: DFS")
+                    algID = 2 # Change algorithm to Depth First Search
+                    lblAlgorithm.UpdateText("Algorithm: DFS")
                 else:
                     btnDFS.backgroundColour = BLACK
 
-                # Change algorithm to Breadth First Search
                 if btnBFS.Check() == True:
                     btnBFS.backgroundColour = GRAY
-                    algID = 3 
-                    dropAlgorithm.UpdateText("Algorithm: BFS")
+                    algID = 3 # Change algorithm to Breadth First Search
+                    lblAlgorithm.UpdateText("Algorithm: BFS")
                 else:
                     btnBFS.backgroundColour = BLACK
 
-                # Change algorithm to Best First Search
-                if btnBestFS.Check() == True:
-                    btnBestFS.backgroundColour = GRAY
-                    algID = 4 
-                    dropAlgorithm.UpdateText("Algorithm: Best FS")
-                else:
-                    btnBestFS.backgroundColour = BLACK
+                if btnRecursiveDivsion.Check() == True:
+                    btnRecursiveDivsion.backgroundColour = GRAY
+                    # Reset board
+                    for row in grid:
+                        for node in row:
+                            node.Reset()
 
-                if dropWalls.Check() == True:
-                    dropWalls.backgroundColour = GRAY
+                    generate_maze_recursive_division(grid, 450, COLS, 0, ROWS)
                 else:
-                    dropWalls.backgroundColour = BLACK
+                    btnRecursiveDivsion.backgroundColour = BLACK
 
-                if dropExtraNodes.Check() == True:
-                    dropExtraNodes.backgroundColour = GRAY
+                if btnPrims.Check() == True:
+                    btnPrims.backgroundColour = GRAY
                 else:
-                    dropExtraNodes.backgroundColour = BLACK
+                    btnPrims.backgroundColour = BLACK
+
+                if btnKruskal.Check() == True:
+                    btnKruskal.backgroundColour = GRAY
+                else:
+                    btnKruskal.backgroundColour = BLACK
+
+                if btnRandom.Check() == True:
+                    btnRandom.backgroundColour = GRAY
+                else:
+                    btnRandom.backgroundColour = BLACK
 
                 # Visualise the algorithm when the 'Visualise' button is pressed
                 if btnVisualise.Check() == True:
-                    # Clear previous path & visited nodes
-                    for row in grid:
-                        for node in row:
-                            if node.IsClosed() or node.IsOpen() or node.colour == ORANGE:
-                                node.Reset()
-
+                    btnVisualise.backgroundColour = GRAY 
                     # Check for start and target node
                     if not start:
                         btnVisualise.backgroundColour = RED
@@ -195,7 +184,6 @@ def main(win, width):
                         btnVisualise.backgroundColour = RED
                         btnVisualise.UpdateText("Needs target node")
                     else:
-                        btnVisualise.backgroundColour = GRAY 
                         for row in grid:
                             for node in row:
                                 node.UpdateNeighbours(grid)
@@ -206,26 +194,15 @@ def main(win, width):
                         # Run the AStar algorithm
                         if(algID == 0):
                             AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+
                         # Run Dijkstra's algorithm
-                        elif(algID == 1):
+                        if(algID == 1):
                             Dijkstra(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                         # Run DFS algorithm
-                        elif(algID == 2):
-                            path = []
-                            visited = []
-                            DFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target, path, visited)
+
                         # Run BFS algorithm
-                        elif(algID == 3):
-                            print("BFS")
-                            BFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
-                        # Run Best FS algorithnm
-                        elif(algID == 4):
-                            print("Best FS")
-                            BestFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
-
-                        # Reset start and target node after algorithm has been visualised
                         tempStart.MakeStart()
                         tempTarget.MakeTarget()
                 else:
@@ -261,15 +238,12 @@ def main(win, width):
                 else:
                     btnClearPath.backgroundColour = BLACK
 
-                if dropSpeed.Check() == True:
-                    dropSpeed.backgroundColour = GRAY
-                else:
-                    dropSpeed.backgroundColour = BLACK
-
                 if btnHelp.Check() == True:
-                    btnHelp.backgroundColour = GRAY
+                    btnHelp.textColour = LIGHTGRAY
+                    btnHelp.borderColour = LIGHTGRAY
                 else:
-                    btnHelp.backgroundColour = BLACK
+                    btnHelp.textColour = BLACK
+                    btnHelp.borderColour = BLACK
                 
             # When mouse is right clicked
             elif pygame.mouse.get_pressed()[2]:
@@ -279,19 +253,19 @@ def main(win, width):
                 if row >= 0 and row < ROWS and col >= 0 and col < COLS:
                     node = grid[row][col]
                     node.Reset()
-                    # Reset start node
+                    #Reset start node
                     if node == start:
                         node.IsStart = - 1
                         start = None
-                    # Reset target node
+                    #Reset target node
                     elif node == target:
                         node.IsTarget = - 1
                         target = None     
                 
             # When the user is using a keyboard shortcut
             if event.type == pygame.KEYDOWN:
-                # When the user wants to escape the program
+                #When the user wants to escape the program
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
-                    
+    pygame.quit()
 main(WIN, WIDTH)
