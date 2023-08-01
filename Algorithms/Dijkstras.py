@@ -1,72 +1,44 @@
 import math
 import pygame
+from queue import PriorityQueue
+from Grid.Path import ReconstructPath
 
-# Find the minimum weighted unexplored node from start node
-def MinNode(grid):
-	x = -1
-	y = -1
-	minDist = math.inf
-	
-	for rows in grid:
-		for node in rows:
-			# When a shorter unexplored distance is found
-			if node.isVisited[0] == 0 and node.distance < minDist:
-				x = node.row
-				y = node.col
-				minDist = node.distance
-
-	return (x, y)	
-
-# Draw the shortest path until we reach back to the start node
-def DrawDijkstra(draw, grid, target):
-
-	if target.predecessor[0] != (-1) and target.predecessor[1] != (-1): # Check for predecessor
-		grid[target.predecessor[0]][target.predecessor[1]].MakePath()
-		draw()
-		DrawDijkstra(draw, grid, grid[target.predecessor[0]][target.predecessor[1]])
-
-# Main implementation of the Dijkstra's algorithm
 def Dijkstra(draw, grid, start, target):
-	queue = []
+	visited = {node: False for row in grid for node in row}
+	distance = {node: math.inf for row in grid for node in row}
+	distance[start] = 0
 	predecessor = {}
+	pQueue = PriorityQueue()
+	pQueue.put((0, start))
 
-	# Add current node to the queue
-	for rows in grid:
-		for node in rows:
-			startNode = (node.row, node.col)
-			queue.append(startNode)
-
-	grid[start.row][start.col].distance = 0
-
-	while len(queue) > 0:
+	while not pQueue.empty():
 		# If user want to quit
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
-	
-		current = MinNode(grid)
 
-		# Found shortest path, visualise it
-		if(current[0] == target.row and current[1] == target.col):
-			DrawDijkstra(draw, grid, target)
-			return
+		current = pQueue.get()[1]
+
+		if visited[current]:
+			continue
+		visited[current] = True
+
+		# If the target node is found
+		if current == target:
+			ReconstructPath(predecessor, target, draw)
+			return True
 		
-		# Remove current node from queue and add it to visited nodes
-		queue.remove(current)
-		grid[current[0]][current[1]].isVisited[0] = 1
-		grid[current[0]][current[1]].MakeClosed()
+		if current != start:
+			current.MakeClosed()
 
-		# When there are no path from start to end node
-		if(grid[current[0]][current[1]].distance == math.inf):
-			return
-		
-		# Consider neighbour nodes of current node
-		for neighbour in grid[current[0]][current[1]].neighbours:
-			newDist = grid[current[0]][current[1]].distance + 1
-
-			# Relax nodes when a shorter distance is found
-			if newDist < neighbour.distance:
-				neighbour.distance = newDist
-				neighbour.predecessor = [current[0], current[1]]
+		# Check the neighbours of current nodes
+		for neighbour in current.neighbours:
+			# Relax the edges
+			if distance[current] + 1 < distance[neighbour]:
+				predecessor[neighbour] = current
+				distance[neighbour] = distance[current] + 1
+				pQueue.put((distance[neighbour], neighbour))
+			if neighbour != target and neighbour != start and not visited[neighbour]:
 				neighbour.MakeOpen()
-				draw()
+		draw()
+	return False

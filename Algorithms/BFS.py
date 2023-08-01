@@ -1,14 +1,11 @@
 import pygame
-
-def DrawBFS(path, grid, draw):
-       for node in path:
-             grid[node[0]][node[1]].MakePath()
-             draw()
+from Grid.Path import ReconstructPath
 
 def BFS(draw, grid, start, target):
+    visited = {node: False for row in grid for node in row}
+    predecessor = {}
     queue = []
-    startPOS = (start.row, start.col)
-    queue.append([startPOS])
+    queue.append(start)
 
     while queue:
         # If the user wants to quit
@@ -16,24 +13,26 @@ def BFS(draw, grid, start, target):
             if event.type == pygame.QUIT:
                 pygame.quit()
         
-        path = []
-        path = queue.pop(0)
-        current = path[-1]
+        current = queue.pop(0)
 
-        grid[current[0]][current[1]].isVisited[0] = 1
-        grid[current[0]][current[1]].MakeClosed()
+        if visited[current]:
+            continue
+        visited[current] = True
 
-        if grid[current[0]][current[1]] == target:
-               DrawBFS(path, grid, draw)
-               return
+        # If target node is found
+        if current == target:
+            ReconstructPath(predecessor, target, draw)
+            return True
         
-        # Check neighbour's node
-        for neighbour in grid[current[0]][current[1]].neighbours:
-               if grid[neighbour.row][neighbour.col].isVisited[0] == 0:
-                      neighbour.MakeOpen()
-                      newPath = list(path)
-                      neighbourPOS = (neighbour.row, neighbour.col)
-                      newPath.append(neighbourPOS)
-                      queue.append(newPath)
-                      grid[neighbour.row][neighbour.col].isVisisted = 1
-                      draw()
+        if current != start:
+            current.MakeClosed()
+        
+        # Check the neighbours of the current node
+        for neighbour in current.neighbours:
+            if neighbour != start and not visited[neighbour]:
+                predecessor[neighbour] = current
+                queue.append(neighbour)
+            if neighbour != target and neighbour != start and not visited[neighbour]:
+                neighbour.MakeOpen()  
+        draw()
+    return False

@@ -1,38 +1,30 @@
-import pygame
+def ReconstructDFS(path, grid, draw):
+    for node in path:
+        grid[node[0]][node[1]].MakePath()
+        draw()
 
-def DrawDFS(path, grid, draw):
-	for node in path:
-		grid[node[0]][node[1]].MakePath()
-		draw()
+def DFS (draw, grid, start, target, path, visited):
+    startNode = (start.row, start.col)
+    targetNode = (target.row, target.col)
 
-def DFS(draw, grid, start, target, path, visited):
-    stack = []
-    visited = []
+    if startNode in visited:
+        return path
     
-    startPOS = (start.row, start.col)
-    targetPOS = (target.row, target.col)
-    stack.append([startPOS])
-    
-    path.append([startPOS])
-    visited.append([startPOS])
-    
-    grid[startPOS[0]][startPOS[1]].MakeClosed()
-        
+    path += [startNode]
+    visited += [startNode]
+
+    grid[startNode[0]][startNode[1]].MakeClosed()
+
     # When the target node is found
-    if startPOS == targetPOS:
-        DrawDFS(path, grid, draw)
+    if startNode == targetNode:
+        ReconstructDFS(path, grid, draw)
         return
+    
+    # Check neighbour
+    for neighbour in grid[startNode[0]][startNode[1]].neighbours:
+        neighbourNode = (neighbour.row, neighbour.col)
 
-    # Find path from neighbours
-    for neighbour in grid[startPOS[0]][startPOS[1]].neighbours:
-        # If user want to quit
-        for event in pygame.event.get():
-             if event.type == pygame.QUIT:
-                  pygame.quit()
-        
-        neighbourPOS = (neighbour.row, neighbour.col)
-        
-        if neighbour not in visited:		
-            grid[neighbourPOS[0]][neighbourPOS[1]].MakeOpen()	
+        if neighbour not in visited:
+            grid[neighbourNode[0]][neighbourNode[1]].MakeOpen()
             draw()
-            return DFS(draw, grid, neighbour, target, path, visited) # Recursively call DFS function
+            return DFS(draw, grid, neighbour, target, path, visited) # Recursively call DFS

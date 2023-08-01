@@ -1,18 +1,12 @@
 import pygame
 from queue import PriorityQueue
+from Grid.Path import ReconstructPath
 
 # Find the manhattan distance as the heuristic
 def Heuristic(p1, p2):
   x1, y1 = p1
   x2, y2 = p2
   return abs(x1 - x2) + abs(y1 - y2)
-
-# Draw the shortest path until we reach back to the start node
-def ReconstructPath(predecessor, current, draw):
-    while current in predecessor:
-      current = predecessor[current]
-      current.MakePath()
-      draw()
 
 # Implement A* Path Finding Algorithm
 def AStar(draw, grid, start, target):

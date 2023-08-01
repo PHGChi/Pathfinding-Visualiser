@@ -6,9 +6,13 @@ from Helper.ButtonHelper import Button
 from Helper.TextHelper import DrawText, DrawTextCenter
 from Grid.Node import Node
 from Grid.Grid import MakeGrid, Draw, GetClickedPos
-from Grid.Maze import generate_maze_recursive_division
+from Grid.Path import ResetPath
+from Maze.RecursiveDivision import RecursiveDivision
 from Algorithms.AStar import AStar
 from Algorithms.Dijkstras import Dijkstra
+from Algorithms.DFS import DFS
+from Algorithms.BFS import BFS
+from Algorithms.Bidirectional import Bidirectional
 
 # Set the display
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -48,10 +52,10 @@ def main(win, width):
             else:
                 btnDFS.backgroundColour = BLACK
 
-            if btnBFS.Check() == True:
-                btnBFS.backgroundColour = DARKGREEN
+            if btnBidirectional.Check() == True:
+                btnBidirectional.backgroundColour = DARKGREEN
             else:
-                btnBFS.backgroundColour = BLACK
+                btnBidirectional.backgroundColour = BLACK
 
             if btnRecursiveDivsion.Check() == True:
                 btnRecursiveDivsion.backgroundColour = DARKGREEN
@@ -140,12 +144,12 @@ def main(win, width):
                 else:
                     btnDFS.backgroundColour = BLACK
 
-                if btnBFS.Check() == True:
-                    btnBFS.backgroundColour = GRAY
-                    algID = 3 # Change algorithm to Breadth First Search
-                    lblAlgorithm.UpdateText("Algorithm: BFS")
+                if btnBidirectional.Check() == True:
+                    btnBidirectional.backgroundColour = GRAY
+                    algID = 3 # Change algorithm to Bidirectional Breadth First Search
+                    lblAlgorithm.UpdateText("Algorithm: Bidirectional BFS")
                 else:
-                    btnBFS.backgroundColour = BLACK
+                    btnBidirectional.backgroundColour = BLACK
 
                 if btnRecursiveDivsion.Check() == True:
                     btnRecursiveDivsion.backgroundColour = GRAY
@@ -154,7 +158,7 @@ def main(win, width):
                         for node in row:
                             node.Reset()
 
-                    generate_maze_recursive_division(grid, 450, COLS, 0, ROWS)
+                    RecursiveDivision(grid, 0, ROWS - 1, 0, COLS - 1)
                 else:
                     btnRecursiveDivsion.backgroundColour = BLACK
 
@@ -193,15 +197,22 @@ def main(win, width):
 
                         # Run the AStar algorithm
                         if(algID == 0):
+                            ResetPath(grid)
                             AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                         # Run Dijkstra's algorithm
                         if(algID == 1):
+                            ResetPath(grid)
                             Dijkstra(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                         # Run DFS algorithm
+                        if(algID == 2):
+                            ResetPath(grid)
+                            path = []
+                            visited = []
+                            DFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target, path, visited)
 
-                        # Run BFS algorithm
+                        # Run Bidrectional BFS algorithm
 
                         tempStart.MakeStart()
                         tempTarget.MakeTarget()
@@ -231,10 +242,7 @@ def main(win, width):
                 # Clear the path and visited nodes when the 'Clear Path' button is pressed
                 if btnClearPath.Check() == True:
                     btnClearPath.backgroundColour = GRAY
-                    for row in grid:
-                        for node in row:
-                            if node.IsClosed() or node.IsOpen() or node.colour == ORANGE:
-                                node.Reset()
+                    ResetPath(grid)
                 else:
                     btnClearPath.backgroundColour = BLACK
 

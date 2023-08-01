@@ -42,7 +42,7 @@ def Draw(win, grid, rows, width, algID):
   btnAStar.Draw(win)
   btnDjikstra.Draw(win)
   btnDFS.Draw(win)
-  btnBFS.Draw(win)
+  btnBidirectional.Draw(win)
   lblMaze.Draw(win)
   btnRecursiveDivsion.Draw(win)
   btnPrims.Draw(win)

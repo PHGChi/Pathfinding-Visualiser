@@ -22,8 +22,8 @@ class Node:
   # Determine where the node is
   def GetPos(self):
     return self.row, self.col
-    
-  # Check the colour of nodes to check its status
+  
+  # Determine node's colour
   def IsClosed(self):
     return self.colour == BLUE
     
