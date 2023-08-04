@@ -1,4 +1,3 @@
-import pygame
 from collections import deque
 from random import randint, choice
 from Grid.Node import UpdateAllNeighbours

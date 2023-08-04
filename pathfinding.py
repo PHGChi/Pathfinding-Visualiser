@@ -5,8 +5,7 @@ from Helper.GlobalVariables import *
 from Grid.Grid import MakeGrid, Draw, GetClickedPos
 from Grid.Path import ResetPath
 from Grid.HelpWindow import HelpSlides
-from Maze.RD import RecursiveDivision
-from Maze.RecursiveDivisionA import RecursiveDivisionA
+from Maze.RecursiveDivision import RecursiveDivision
 from Maze.Prims import Prims
 from Maze.Random import Random
 from Maze.BinaryTree import BinaryTree
@@ -193,7 +192,7 @@ def main(win, width):
                     target = None
                     grid = MakeGrid(ROWS, COLS)
 
-                    Random(grid)
+                    Random(lambda: Draw(win, grid, ROWS, width, algID), grid)
                 else:
                     btnRandom.backgroundColour = BLACK
 

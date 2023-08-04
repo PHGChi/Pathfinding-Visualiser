@@ -1,8 +1,7 @@
-import pygame
-from collections import deque
-from random import randint, choice
+from random import randint
+from Grid.Node import UpdateAllNeighbours
 
-def Random(grid, draw):
+def Random(draw, grid):
     rows, cols = len(grid), len(grid[0])
     colWalls = rows * cols * 0.08 // rows
     for col in grid:
@@ -15,4 +14,6 @@ def Random(grid, draw):
                 col[idx].MakeWall()
                 draw()
 
-    grid = 1
+    grid = UpdateAllNeighbours(grid, None)
+
+    return grid
