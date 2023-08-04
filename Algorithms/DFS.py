@@ -1,30 +1,39 @@
-def ReconstructDFS(path, grid, draw):
-    for node in path:
-        grid[node[0]][node[1]].MakePath()
+import pygame
+from Grid.Path import ReconstructPath
+
+def DFS(draw, grid, start, target):
+    visited = {node: False for row in grid for node in row}
+    predecessor = {}
+    stack = []
+    stack.append(start)
+
+    while stack:
+        # If the user wants to quit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+        
+        lastNode = len(stack) - 1
+        current = stack.pop(lastNode)
+
+        if visited[current]:
+            continue
+        visited[current] = True
+
+        # If target node is found
+        if current == target:
+            ReconstructPath(predecessor, target, draw)
+            return True
+        
+        if current != start:
+            current.MakeClosed()
+        
+        # Check the neighbours of the current node
+        for neighbour in current.neighbours:
+            if neighbour != start and not visited[neighbour]:
+                predecessor[neighbour] = current
+                stack.append(neighbour)
+            if neighbour != target and neighbour != start and not visited[neighbour]:
+                neighbour.MakeOpen()  
         draw()
-
-def DFS (draw, grid, start, target, path, visited):
-    startNode = (start.row, start.col)
-    targetNode = (target.row, target.col)
-
-    if startNode in visited:
-        return path
-    
-    path += [startNode]
-    visited += [startNode]
-
-    grid[startNode[0]][startNode[1]].MakeClosed()
-
-    # When the target node is found
-    if startNode == targetNode:
-        ReconstructDFS(path, grid, draw)
-        return
-    
-    # Check neighbour
-    for neighbour in grid[startNode[0]][startNode[1]].neighbours:
-        neighbourNode = (neighbour.row, neighbour.col)
-
-        if neighbour not in visited:
-            grid[neighbourNode[0]][neighbourNode[1]].MakeOpen()
-            draw()
-            return DFS(draw, grid, neighbour, target, path, visited) # Recursively call DFS
+    return False

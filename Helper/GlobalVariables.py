@@ -17,9 +17,10 @@ WIDTH = 1200
 HEIGHT = 750
 
 # Related to grid
-ROWS = 70
+ROWS = 50
 COLS = 50
 GAP = 15
+numCells = [ROWS, COLS]
 
 # Related to sidebar
 SIDEBARWIDTH = 450
@@ -44,7 +45,7 @@ btnBidirectional = Button(SECONDLINE, TITLEHEIGHT + 4 * BUTTONHEIGHT + 5 * GAP, 
 lblMaze = Button(MIDDLE, TITLEHEIGHT + 5 * BUTTONHEIGHT + 6 * GAP, BUTTONWIDTH, BUTTONHEIGHT, BLACK, WHITE, "Maze Generator", "Heading")
 btnRecursiveDivsion = Button(FIRSTLINE, TITLEHEIGHT + 6 * BUTTONHEIGHT + 7 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Recursive Division", "Normal")
 btnPrims = Button(SECONDLINE, TITLEHEIGHT + 6 * BUTTONHEIGHT + 7 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Prim's MST", "Normal")
-btnKruskal = Button(FIRSTLINE, TITLEHEIGHT + 7 * BUTTONHEIGHT + 8 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Kruskal", "Normal")
+btnBinaryTree = Button(FIRSTLINE, TITLEHEIGHT + 7 * BUTTONHEIGHT + 8 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Binary Tree", "Normal")
 btnRandom = Button(SECONDLINE, TITLEHEIGHT + 7 * BUTTONHEIGHT + 8 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Randomised", "Normal")
 
 btnHelp = Button(420, TITLEHEIGHT + 8 * BUTTONHEIGHT + 10 * GAP, 15, 15, BLACK, WHITE, "?", "Help", border=True)

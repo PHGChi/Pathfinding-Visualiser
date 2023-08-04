@@ -18,11 +18,16 @@ def Bidirectional(draw, grid, start, target):
         current1 = queue1.pop(0)
         current2 = queue2.pop(0)
 
-        if visited[current1]:
-            continue
-        visited[current1] = True
+        current1.MakeClosed()
+        current2.MakeClosed()
 
-        # If target node is found
+        
+        while queue1:
+            if visited[current1]:
+                continue
+            visited[current1] = True
+
+        # 
         if current1 == target:
             ReconstructPath(predecessor, target, draw)
             return True

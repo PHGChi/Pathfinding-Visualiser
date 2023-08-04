@@ -3,7 +3,7 @@ from Helper.GlobalVariables import *
 
 # For the status of node and colour of grids
 class Node:
-  def __init__(self, row, col, width, totalRows, totalCols, isVisited, distance, predecessor, isStart, isTarget):
+  def __init__(self, row, col, width, totalRows, totalCols):
     self.row = row
     self.col = col
     self.x = row * width + SIDEBARWIDTH
@@ -13,11 +13,6 @@ class Node:
     self.width = width
     self.totalRows = totalRows
     self.totalCols = totalCols
-    self.isVisited = isVisited
-    self.distance = distance
-    self.predecessor = predecessor
-    self.isStart = isStart
-    self.isTarget = isTarget
 
   # Determine where the node is
   def GetPos(self):
@@ -61,21 +56,6 @@ class Node:
   def MakePath(self):
     self.colour = ORANGE
 
-  def GetVisited(self):
-    return self.isVisited[0], self.isVisited[1]
-  
-  def GetDistance(self):
-    return self.distance
-  
-  def GetPredecessor(self):
-    return self.predecessor[0], self.predecessor[1]
-  
-  def GetStart(self):
-    return self.isStart
-  
-  def GetTarget(self):
-    return self.isTarget
-    
   def Draw(self, win):
     pygame.draw.rect(win, self.colour, (self.x, self.y, self.width, self.width))
 
@@ -96,3 +76,10 @@ class Node:
     
   def __lt__(self, other):
     return False
+  
+def UpdateAllNeighbours(grid, draw):
+  for col in grid:
+    for node in col:
+      node.UpdateNeighbours(grid)
+
+  return grid

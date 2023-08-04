@@ -1,0 +1,2 @@
+def BinaryTree(grid):
+    pass

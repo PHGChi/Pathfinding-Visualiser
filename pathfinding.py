@@ -2,12 +2,14 @@ import pygame
 import sys
 sys.path.append('.')
 from Helper.GlobalVariables import *
-from Helper.ButtonHelper import Button
-from Helper.TextHelper import DrawText, DrawTextCenter
-from Grid.Node import Node
 from Grid.Grid import MakeGrid, Draw, GetClickedPos
 from Grid.Path import ResetPath
-from Maze.RecursiveDivision import RecursiveDivision
+from Grid.HelpWindow import HelpSlides
+from Maze.RD import RecursiveDivision
+from Maze.RecursiveDivisionA import RecursiveDivisionA
+from Maze.Prims import Prims
+from Maze.Random import Random
+from Maze.BinaryTree import BinaryTree
 from Algorithms.AStar import AStar
 from Algorithms.Dijkstras import Dijkstra
 from Algorithms.DFS import DFS
@@ -67,10 +69,10 @@ def main(win, width):
             else:
                 btnPrims.backgroundColour = BLACK
 
-            if btnKruskal.Check() == True:
-                btnKruskal.backgroundColour = DARKGREEN
+            if btnBinaryTree.Check() == True:
+                btnBinaryTree.backgroundColour = DARKGREEN
             else:
-                btnKruskal.backgroundColour = BLACK
+                btnBinaryTree.backgroundColour = BLACK
 
             if btnRandom.Check() == True:
                 btnRandom.backgroundColour = DARKGREEN
@@ -154,26 +156,44 @@ def main(win, width):
                 if btnRecursiveDivsion.Check() == True:
                     btnRecursiveDivsion.backgroundColour = GRAY
                     # Reset board
-                    for row in grid:
-                        for node in row:
-                            node.Reset()
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
 
-                    RecursiveDivision(grid, 0, ROWS - 1, 0, COLS - 1)
+                    RecursiveDivision(lambda: Draw(win, grid, ROWS, width, algID), grid, numCells)
                 else:
                     btnRecursiveDivsion.backgroundColour = BLACK
 
                 if btnPrims.Check() == True:
                     btnPrims.backgroundColour = GRAY
+                    # Reset board
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
+
+                    Prims(grid)
                 else:
                     btnPrims.backgroundColour = BLACK
 
-                if btnKruskal.Check() == True:
-                    btnKruskal.backgroundColour = GRAY
+                if btnBinaryTree.Check() == True:
+                    btnBinaryTree.backgroundColour = GRAY
+                    # Reset board
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
+
+                    BinaryTree(grid)
                 else:
-                    btnKruskal.backgroundColour = BLACK
+                    btnBinaryTree.backgroundColour = BLACK
 
                 if btnRandom.Check() == True:
                     btnRandom.backgroundColour = GRAY
+                    # Reset board
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
+
+                    Random(grid)
                 else:
                     btnRandom.backgroundColour = BLACK
 
@@ -208,9 +228,7 @@ def main(win, width):
                         # Run DFS algorithm
                         if(algID == 2):
                             ResetPath(grid)
-                            path = []
-                            visited = []
-                            DFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target, path, visited)
+                            DFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                         # Run Bidrectional BFS algorithm
 
@@ -249,6 +267,17 @@ def main(win, width):
                 if btnHelp.Check() == True:
                     btnHelp.textColour = LIGHTGRAY
                     btnHelp.borderColour = LIGHTGRAY
+
+                    # Show help slides
+                    HelpSlides()
+                    # Reset the display
+                    pygame.display.set_mode((WIDTH, HEIGHT))
+                    pygame.display.set_caption("Pathfinding Visualiser")
+                    pygame.init()
+
+                    # Reset button's colour after showing the slides
+                    # btnHelp.textColour = BLACK
+                    # btnHelp.borderColour = BLACK
                 else:
                     btnHelp.textColour = BLACK
                     btnHelp.borderColour = BLACK
