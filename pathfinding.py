@@ -36,13 +36,12 @@ def main(win, width):
             if event.type == pygame.QUIT:
                 run = False
 
-            # Change buttons colour based on whether they are selected or not
-            # Add this feature in the button class
+            # Change buttons colour when hovered over    
             if btnAStar.Check() == True:
                 btnAStar.backgroundColour = DARKGREEN
             else:
                 btnAStar.backgroundColour = BLACK
-
+            
             if btnDjikstra.Check() == True:
                 btnDjikstra.backgroundColour = DARKGREEN
             else:
@@ -230,6 +229,9 @@ def main(win, width):
                             DFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                         # Run Bidrectional BFS algorithm
+                        if(algID == 3):
+                            ResetPath(grid)
+                            Bidirectional(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
 
                         tempStart.MakeStart()
                         tempTarget.MakeTarget()

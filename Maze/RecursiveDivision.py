@@ -82,7 +82,7 @@ class Chamber:
                 yToAvoid = [colWall[2][1]]
                 
                 # Check for further division
-                if (xMax - xMin >=3) and (yMax - yMin >= 3):
+                if (xMax - xMin >= 3) and (yMax - yMin >= 3):
                     for x in self.xToAvoid:
                         if x != None and (xMin <= x <= xMax):
                             xToAvoid.append(x)
@@ -114,5 +114,3 @@ def RecursiveDivision(draw, grid, numCells):
     grid = UpdateAllNeighbours(grid, None)
 
     return grid
-            
-
