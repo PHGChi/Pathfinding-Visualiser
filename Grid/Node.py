@@ -18,7 +18,10 @@ class Node:
   def GetPos(self):
     return self.row, self.col
   
-  # Determine node's colour
+  # Checking node's colour to determine status
+  def IsReset(self):
+    return self.colour == WHITE
+  
   def IsClosed(self):
     return self.colour == BLUE
     

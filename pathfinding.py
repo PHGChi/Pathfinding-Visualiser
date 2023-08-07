@@ -169,7 +169,7 @@ def main(win, width):
                     target = None
                     grid = MakeGrid(ROWS, COLS)
 
-                    Prims(grid)
+                    Prims(lambda: Draw(win, grid, ROWS, width, algID), grid)
                 else:
                     btnPrims.backgroundColour = BLACK
 

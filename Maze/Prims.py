@@ -1,25 +1,37 @@
 import random
 from Helper.GlobalVariables import *
 
-def Prims(grid):
-    pass
-#     startX = random.randint(0, numCells - 1)
-#     startY = random.randint(0, numCells - 1)
+def Prims(draw, grid):
+    # Fill the grid with wall nodes
+    for row in grid:
+        for node in row:
+            node.MakeWall()
+    # Set a random start node
+    startRow = random.randint(0, ROWS - 1)
+    startCol = random.randint(0, COLS - 1)
 
-#     frontier = [(startX, startY)]
-#     while frontier:
-#         currentX, currentY = random.choice(frontier)
-#         neighbours = []
+    frontier = [(startRow, startCol)] # Holds all nodes to be considered
+    grid[startRow][startCol].Reset()
 
-#         if currentX > 1:
-#             neighbours.append((currentX - 2, currentY))
-#         if currentX < numCells - 2:
-#             neighbours.append((currentX + 2, currentY))
-#         if currentY > 1: 
-#             neighbours.append((currentX, currentY - 2))
-#         if currentY < numCells - 2:
-#             neighbours.append((currentX, currentY + 2))
+    while frontier:
+        current = frontier.pop(random.randint(0, len(frontier) - 1))
 
-#         for neighbourX, neighbourY in neighbours:
-#             pass
+        # Get the neighbours of the current cell
+        # The neighbours are all two nodes away from each other
+        neighbours = []
+        row, col = current
+        if row >= 2: neighbours.append((row - 2, col))
+        if row < ROWS - 2: neighbours.append((row + 2, col))
+        if col >= 2: neighbours.append((row, col - 2))
+        if col < COLS - 2: neighbours.append((row, col + 2))
 
+        random.shuffle(neighbours)
+
+        for rowNeighbour, colNeighbour in neighbours:
+            if grid[rowNeighbour][colNeighbour].IsWall():
+                # Create a path between the current and neighbour node
+                grid[rowNeighbour][colNeighbour].Reset()
+                grid[row + (rowNeighbour - row) // 2][col + (colNeighbour - col) // 2].Reset()
+                frontier.append((rowNeighbour, colNeighbour))
+        draw()
+    
