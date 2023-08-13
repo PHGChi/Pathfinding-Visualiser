@@ -1,3 +1,4 @@
+import pygame
 from collections import deque
 from random import randint, choice
 from Grid.Node import UpdateAllNeighbours
@@ -106,6 +107,11 @@ def RecursiveDivision(draw, grid, numCells):
     stack = deque([begin])
 
     while stack:
+        # If the user wants to quit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+
         chamber = stack.pop()
         if chamber.isQualified:
             chamber.BuildWallsAndDoors(grid, draw)

@@ -2,7 +2,7 @@ import pygame
 import math
 from Grid.Node import Node
 from Helper.GlobalVariables import *
-from Helper.TextHelper import DrawText, DrawTextCenter
+from Helper.TextHelper import DrawText
 
 pygame.init()
 font = pygame.font.SysFont('Arial', GAP)

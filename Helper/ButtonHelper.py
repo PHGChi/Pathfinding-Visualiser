@@ -1,5 +1,5 @@
 import pygame
-from Helper.TextHelper import DrawText, DrawTextCenter
+from Helper.TextHelper import DrawTextCenter
 
 class Button(object):
     global screenWidth, screenHeight, screen

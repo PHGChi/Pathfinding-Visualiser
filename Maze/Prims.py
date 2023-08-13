@@ -1,3 +1,4 @@
+import pygame
 import random
 from Helper.GlobalVariables import *
 
@@ -14,6 +15,11 @@ def Prims(draw, grid):
     grid[startRow][startCol].Reset()
 
     while frontier:
+        # If the user wants to quit
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                
         current = frontier.pop(random.randint(0, len(frontier) - 1))
 
         # Get the neighbours of the current cell

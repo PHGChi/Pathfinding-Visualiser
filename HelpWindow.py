@@ -2,7 +2,6 @@ import pygame
 import pygame.image
 import os.path
 from Helper.GlobalVariables import *
-from Helper.TextHelper import DrawText, DrawTextCenter
 from Helper.ButtonHelper import Button
 
 def HelpSlides():

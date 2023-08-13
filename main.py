@@ -4,7 +4,7 @@ sys.path.append('.')
 from Helper.GlobalVariables import *
 from Grid.Grid import MakeGrid, Draw, GetClickedPos
 from Grid.Path import ResetPath
-from Grid.HelpWindow import HelpSlides
+from HelpWindow import HelpSlides
 from Maze.RecursiveDivision import RecursiveDivision
 from Maze.Prims import Prims
 from Maze.Random import Random
@@ -12,7 +12,6 @@ from Maze.BinaryTree import BinaryTree
 from Algorithms.AStar import AStar
 from Algorithms.Dijkstras import Dijkstra
 from Algorithms.DFS import DFS
-from Algorithms.BFS import BFS
 from Algorithms.Bidirectional import Bidirectional
 
 # Set the display
@@ -180,7 +179,7 @@ def main(win, width):
                     target = None
                     grid = MakeGrid(ROWS, COLS)
 
-                    BinaryTree(grid)
+                    BinaryTree(lambda: Draw(win, grid, ROWS, width, algID), grid)
                 else:
                     btnBinaryTree.backgroundColour = BLACK
 
@@ -306,4 +305,6 @@ def main(win, width):
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
     pygame.quit()
-main(WIN, WIDTH)
+
+if __name__ == '__main__':
+    main(WIN, WIDTH)
