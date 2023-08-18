@@ -19,87 +19,41 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pathfinding Visualiser")
 pygame.init()
 
-def main(win, width):
+def main(win):
     grid = MakeGrid(ROWS, COLS)
 
     start = None
     target = None
     algID = 0
+    noPathFound = False
 
     run = True
     while run:
-        Draw(win, grid, ROWS, width, algID)
+        Draw(win, grid, ROWS)
 
         for event in pygame.event.get():
             # If user wants to exit the program
             if event.type == pygame.QUIT:
                 run = False
 
-            # Change buttons colour when hovered over    
-            if btnAStar.Check() == True:
-                btnAStar.backgroundColour = DARKGREEN
-            else:
-                btnAStar.backgroundColour = BLACK
-            
-            if btnDjikstra.Check() == True:
-                btnDjikstra.backgroundColour = DARKGREEN
-            else:
-                btnDjikstra.backgroundColour = BLACK
-
-            if btnDFS.Check() == True:
-                btnDFS.backgroundColour = DARKGREEN
-            else:
-                btnDFS.backgroundColour = BLACK
-
-            if btnBidirectional.Check() == True:
-                btnBidirectional.backgroundColour = DARKGREEN
-            else:
-                btnBidirectional.backgroundColour = BLACK
-
-            if btnRecursiveDivsion.Check() == True:
-                btnRecursiveDivsion.backgroundColour = DARKGREEN
-            else:
-                btnRecursiveDivsion.backgroundColour = BLACK
-            
-            if btnPrims.Check() == True:
-                btnPrims.backgroundColour = DARKGREEN
-            else:
-                btnPrims.backgroundColour = BLACK
-
-            if btnBinaryTree.Check() == True:
-                btnBinaryTree.backgroundColour = DARKGREEN
-            else:
-                btnBinaryTree.backgroundColour = BLACK
-
-            if btnRandom.Check() == True:
-                btnRandom.backgroundColour = DARKGREEN
-            else:
-                btnRandom.backgroundColour = BLACK
-
-            if btnClearBoard.Check() == True:
-                btnClearBoard.backgroundColour = DARKGREEN
-            else:
-                btnClearBoard.backgroundColour = BLACK
-
-            if btnClearWall.Check() == True:
-                btnClearWall.backgroundColour = DARKGREEN
-            else:
-                btnClearWall.backgroundColour = BLACK
-
-            if btnClearPath.Check() == True:
-                btnClearPath.backgroundColour = DARKGREEN
-            else:
-                btnClearPath.backgroundColour = BLACK
-            
-            if btnHelp.Check() == True:
-                btnHelp.textColour = GRAY
-                btnHelp.borderColour = GRAY
-            else:
-                btnHelp.textColour = BLACK
-                btnHelp.borderColour = BLACK
+            # Change colour when hovered
+            btnVisualise.Check()
+            btnClearBoard.Check()
+            btnClearPath.Check()
+            btnClearWall.Check()
+            btnAStar.Check()
+            btnDjikstra.Check()
+            btnDFS.Check()
+            btnBidirectional.Check()
+            btnRecursiveDivsion.Check()
+            btnPrims.Check()
+            btnBinaryTree.Check()
+            btnRandom.Check()
+            btnHelp.Check()
         
             # When mouse is left clicked
             if pygame.mouse.get_pressed()[0]:
+                noPathFound = False
                 pos = pygame.mouse.get_pos()
                 row, col = GetClickedPos(pos)
                 if row >= 0 and row < ROWS and col >= 0 and col < COLS:
@@ -119,84 +73,9 @@ def main(win, width):
                     # Choose wall node
                     elif node != target and node != start:
                         node.MakeWall()
-                        
-                # Change the button's colour when the user click on it and run what the button is supposed to do
-                # Add this feature to the button class
-                if btnAStar.Check() == True:
-                    btnAStar.backgroundColour = GRAY
-                    algID = 0 # Change algorithm to A*
-                    lblAlgorithm.UpdateText("Algorithm: A*")
-                else:
-                    btnAStar.backgroundColour = BLACK
-
-                if btnDjikstra.Check() == True:
-                    btnDjikstra.backgroundColour = GRAY
-                    algID = 1 # Change algorithm to Djikstra's
-                    lblAlgorithm.UpdateText("Algorithm: Dijkstra's")
-                else:
-                    btnDjikstra.backgroundColour = BLACK
-
-                if btnDFS.Check() == True:
-                    btnDFS.backgroundColour = GRAY
-                    algID = 2 # Change algorithm to Depth First Search
-                    lblAlgorithm.UpdateText("Algorithm: DFS")
-                else:
-                    btnDFS.backgroundColour = BLACK
-
-                if btnBidirectional.Check() == True:
-                    btnBidirectional.backgroundColour = GRAY
-                    algID = 3 # Change algorithm to Bidirectional Breadth First Search
-                    lblAlgorithm.UpdateText("Algorithm: Bidirectional BFS")
-                else:
-                    btnBidirectional.backgroundColour = BLACK
-
-                if btnRecursiveDivsion.Check() == True:
-                    btnRecursiveDivsion.backgroundColour = GRAY
-                    # Reset board
-                    start = None
-                    target = None
-                    grid = MakeGrid(ROWS, COLS)
-
-                    RecursiveDivision(lambda: Draw(win, grid, ROWS, width, algID), grid, numCells)
-                else:
-                    btnRecursiveDivsion.backgroundColour = BLACK
-
-                if btnPrims.Check() == True:
-                    btnPrims.backgroundColour = GRAY
-                    # Reset board
-                    start = None
-                    target = None
-                    grid = MakeGrid(ROWS, COLS)
-
-                    Prims(lambda: Draw(win, grid, ROWS, width, algID), grid)
-                else:
-                    btnPrims.backgroundColour = BLACK
-
-                if btnBinaryTree.Check() == True:
-                    btnBinaryTree.backgroundColour = GRAY
-                    # Reset board
-                    start = None
-                    target = None
-                    grid = MakeGrid(ROWS, COLS)
-
-                    BinaryTree(lambda: Draw(win, grid, ROWS, width, algID), grid)
-                else:
-                    btnBinaryTree.backgroundColour = BLACK
-
-                if btnRandom.Check() == True:
-                    btnRandom.backgroundColour = GRAY
-                    # Reset board
-                    start = None
-                    target = None
-                    grid = MakeGrid(ROWS, COLS)
-
-                    Random(lambda: Draw(win, grid, ROWS, width, algID), grid)
-                else:
-                    btnRandom.backgroundColour = BLACK
 
                 # Visualise the algorithm when the 'Visualise' button is pressed
                 if btnVisualise.Check() == True:
-                    btnVisualise.backgroundColour = GRAY 
                     # Check for start and target node
                     if not start:
                         btnVisualise.backgroundColour = RED
@@ -215,75 +94,109 @@ def main(win, width):
                         # Run the AStar algorithm
                         if(algID == 0):
                             ResetPath(grid)
-                            AStar(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+                            if not AStar(lambda: Draw(win, grid, ROWS), grid, start, target):
+                                noPathFound = True
 
                         # Run Dijkstra's algorithm
                         if(algID == 1):
                             ResetPath(grid)
-                            Dijkstra(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+                            if not Dijkstra(lambda: Draw(win, grid, ROWS), grid, start, target):
+                                noPathFound = True
 
                         # Run DFS algorithm
                         if(algID == 2):
                             ResetPath(grid)
-                            DFS(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+                            if not DFS(lambda: Draw(win, grid, ROWS), grid, start, target):
+                                noPathFound = True
 
                         # Run Bidrectional BFS algorithm
                         if(algID == 3):
                             ResetPath(grid)
-                            Bidirectional(lambda: Draw(win, grid, ROWS, width, algID), grid, start, target)
+                            if not Bidirectional(lambda: Draw(win, grid, ROWS), grid, start, target):
+                                noPathFound = True
 
                         tempStart.MakeStart()
                         tempTarget.MakeTarget()
                 else:
-                    btnVisualise.backgroundColour = GREEN
                     btnVisualise.UpdateText("Visualise") # Reset button back to "Visualise"
 
                 # Clear the board when the 'Clear Board' button is pressed
                 if btnClearBoard.Check() == True:
-                    btnClearBoard.backgroundColour = GRAY 
                     start = None
                     target = None
                     grid = MakeGrid(ROWS, COLS)
-                else:
-                    btnClearBoard.backgroundColour = BLACK
 
                 # Clear the wall nodes when the 'Clear Wall' button is pressed
                 if btnClearWall.Check() == True:
-                    btnClearWall.backgroundColour = GRAY
                     for row in grid:
                         for node in row:
                             if node.IsWall():
                                 node.Reset()
-                else:
-                    btnClearWall.backgroundColour = BLACK
 
                 # Clear the path and visited nodes when the 'Clear Path' button is pressed
                 if btnClearPath.Check() == True:
-                    btnClearPath.backgroundColour = GRAY
                     ResetPath(grid)
-                else:
-                    btnClearPath.backgroundColour = BLACK
+
+                if btnAStar.Check() == True:
+                    algID = 0 # Change algorithm to A*
+                    lblAlgorithm.UpdateText("Algorithm: A*")
+
+                if btnDjikstra.Check() == True:
+                    algID = 1 # Change algorithm to Djikstra's
+                    lblAlgorithm.UpdateText("Algorithm: Dijkstra's")
+
+                if btnDFS.Check() == True:
+                    algID = 2 # Change algorithm to Depth First Search
+                    lblAlgorithm.UpdateText("Algorithm: DFS")
+
+                if btnBidirectional.Check() == True:
+                    algID = 3 # Change algorithm to Bidirectional Breadth First Search
+                    lblAlgorithm.UpdateText("Algorithm: Bidirectional BFS")
+
+                # Generate maze based on algorithm
+                if btnRecursiveDivsion.Check() == True:
+                    # Reset board
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
+
+                    RecursiveDivision(lambda: Draw(win, grid, ROWS), grid, numCells)
+
+                if btnPrims.Check() == True:
+                    # Reset board
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
+
+                    Prims(lambda: Draw(win, grid, ROWS), grid)
+
+                if btnBinaryTree.Check() == True:
+                    # Reset board
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
+
+                    BinaryTree(lambda: Draw(win, grid, ROWS), grid)
+
+                if btnRandom.Check() == True:
+                    # Reset board
+                    start = None
+                    target = None
+                    grid = MakeGrid(ROWS, COLS)
+
+                    Random(lambda: Draw(win, grid, ROWS), grid)
 
                 if btnHelp.Check() == True:
-                    btnHelp.textColour = LIGHTGRAY
-                    btnHelp.borderColour = LIGHTGRAY
-
                     # Show help slides
                     HelpSlides()
                     # Reset the display
                     pygame.display.set_mode((WIDTH, HEIGHT))
                     pygame.display.set_caption("Pathfinding Visualiser")
                     pygame.init()
-
-                    # Reset button's colour after showing the slides
-                    # btnHelp.textColour = BLACK
-                    # btnHelp.borderColour = BLACK
-                else:
-                    btnHelp.textColour = BLACK
-                    btnHelp.borderColour = BLACK
                 
             # When mouse is right clicked
             elif pygame.mouse.get_pressed()[2]:
+                noPathFound = False
                 pos = pygame.mouse.get_pos()
                 row, col = GetClickedPos(pos)
 
@@ -301,10 +214,17 @@ def main(win, width):
                 
             # When the user is using a keyboard shortcut
             if event.type == pygame.KEYDOWN:
-                #When the user wants to escape the program
+                # When the user wants to escape the program
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
+
+        # For when there is no path between start and target  node
+        if noPathFound:
+            lblNoPath.Draw(win)
+            pygame.display.update()
+
+        pygame.display.update()
     pygame.quit()
 
 if __name__ == '__main__':
-    main(WIN, WIDTH)
+    main(WIN)

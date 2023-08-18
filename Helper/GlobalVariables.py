@@ -33,7 +33,7 @@ MIDDLE = (SIDEBARWIDTH - BUTTONWIDTH)//2
 
 # Sidebar buttons
 lblTitle = Button(MIDDLE, 0, BUTTONWIDTH, TITLEHEIGHT, BLACK, WHITE, "PATHFINDING", "Title")
-btnVisualise = Button(FIRSTLINE, TITLEHEIGHT + GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, GREEN, "Visualise", "Normal")
+btnVisualise = Button(FIRSTLINE, TITLEHEIGHT + GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, GREEN, "Visualise", "Visualise")
 btnClearBoard = Button(SECONDLINE, TITLEHEIGHT + GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Clear Board", "Normal")
 btnClearWall = Button(FIRSTLINE, TITLEHEIGHT + BUTTONHEIGHT + 2 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Clear Walls", "Normal")
 btnClearPath = Button(SECONDLINE, TITLEHEIGHT + BUTTONHEIGHT + 2 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Clear Path", "Normal")
@@ -48,7 +48,14 @@ btnPrims = Button(SECONDLINE, TITLEHEIGHT + 6 * BUTTONHEIGHT + 7 * GAP, BUTTONWI
 btnBinaryTree = Button(FIRSTLINE, TITLEHEIGHT + 7 * BUTTONHEIGHT + 8 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Binary Tree", "Normal")
 btnRandom = Button(SECONDLINE, TITLEHEIGHT + 7 * BUTTONHEIGHT + 8 * GAP, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Randomised", "Normal")
 
+# Related to help guide
 btnHelp = Button(420, TITLEHEIGHT + 8 * BUTTONHEIGHT + 10 * GAP, 15, 15, BLACK, WHITE, "?", "Help", border=True)
+btnExit = Button(15, 540, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Exit", "Normal")
+btnPrevious = Button(270, 540, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Previous", "Normal")
+btnNext = Button(435, 540, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Next", "Normal")
+
+durationNoPath = 5000
+lblNoPath = Button(750, 352.2, BUTTONWIDTH, TITLEHEIGHT, WHITE, RED, "No Path Found", "No Path")
 
 # Legend symbols
 lblLegend = Button(MIDDLE, 585, BUTTONWIDTH, BUTTONHEIGHT, BLACK, WHITE, "Legend", "Heading")

@@ -2,7 +2,6 @@ import pygame
 import pygame.image
 import os.path
 from Helper.GlobalVariables import *
-from Helper.ButtonHelper import Button
 
 def HelpSlides():
     # Dimensions
@@ -15,10 +14,6 @@ def HelpSlides():
     pygame.init()
 
     helpWin.fill(WHITE)
-
-    # Define buttons
-    btnPrevious = Button(20, 550, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Previous", "Normal")
-    btnNext = Button(430, 550, BUTTONWIDTH, BUTTONHEIGHT, WHITE, BLACK, "Next", "Normal")
 
     # Define slides' content
     slides = [
@@ -40,28 +35,26 @@ def HelpSlides():
                 run = False
 
             # Change button colour when hovered over
-            if btnPrevious.Check() == True:
-                btnPrevious.backgroundColour = DARKGREEN
-            else:
-                btnPrevious.backgroundColour = BLACK
-
-            if btnNext.Check() == True:
-                btnNext.backgroundColour = DARKGREEN
-            else:
-                btnNext.backgroundColour = BLACK
+            btnExit.Check()
+            btnPrevious.Check()
+            btnNext.Check()
 
             if event.type == pygame.MOUSEBUTTONDOWN: # Left clicked
                 pos = pygame.mouse.get_pos()
+                
+                # Exit help guide when "Exit" button is clicked
+                if btnExit.Check():
+                    run = False
 
-                # Check if "Previous" button is clicked
-                if btnPrevious.rect.collidepoint(pos):
+                # Move to previous slide when "Previous" button is clicked
+                if btnPrevious.Check():
                     if slide <= 0:
                         slide == 0
                     else:
                         slide -= 1
 
-                # Check if "Next" button is clicked
-                if btnNext.rect.collidepoint(pos):
+                # Move to next slide when "Next" button is clicked
+                if btnNext.Check():
                     if slide >= 6:
                         slide == 6
                     else:
@@ -73,6 +66,7 @@ def HelpSlides():
         helpWin.blit(slideContent, (0, 0))
 
         # Draw buttons
+        btnExit.Draw(helpWin)
         if slide > 0: 
             btnPrevious.Draw(helpWin)
         if slide < 6:

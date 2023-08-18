@@ -1,5 +1,4 @@
 import pygame
-import math
 from Grid.Node import Node
 from Helper.GlobalVariables import *
 from Helper.TextHelper import DrawText
@@ -7,7 +6,7 @@ from Helper.TextHelper import DrawText
 pygame.init()
 font = pygame.font.SysFont('Arial', GAP)
 
-#Make the grids to represent nodes
+# Make the grids to represent nodes
 def MakeGrid(rows, cols):
   grid = []
 
@@ -19,7 +18,7 @@ def MakeGrid(rows, cols):
     
   return grid
 
-#Initialise the grid's lines
+# Initialise the grid's lines
 def DrawGrid(win, rows):
   for i in range(rows):
     pygame.draw.line(win, GRAY, (SIDEBARWIDTH, i * GAP), (SIDEBARWIDTH + GAP * rows - 1, i * GAP))
@@ -27,7 +26,7 @@ def DrawGrid(win, rows):
        pygame.draw.line(win, GRAY, (SIDEBARWIDTH + j * GAP, 0), (SIDEBARWIDTH + j * GAP, GAP * rows - 1))
 
 # Draw everything on the screen
-def Draw(win, grid, rows, width, algID):
+def Draw(win, grid, rows):
   win.fill(WHITE)
     
   for row in grid:
@@ -36,7 +35,7 @@ def Draw(win, grid, rows, width, algID):
 
   DrawGrid(win, rows)
 
-  #Display the sidebar
+  # Display the sidebar
   lblTitle.Draw(win)
   lblAlgorithm.Draw(win)
   btnAStar.Draw(win)
@@ -52,9 +51,8 @@ def Draw(win, grid, rows, width, algID):
   btnClearBoard.Draw(win)
   btnClearWall.Draw(win)
   btnClearPath.Draw(win)
-  btnHelp.Draw(win)
 
-  #Display the legend
+  # Display the legend
   lblLegend.Draw(win)
   legendStart.Draw(win)
   legendTarget.Draw(win)
@@ -64,7 +62,7 @@ def Draw(win, grid, rows, width, algID):
   legendPath.Draw(win)
   legendWall.Draw(win)
 
-  #Display the legend's text (try to center this)
+  # Display the legend's text
   legendFont = pygame.font.SysFont('sans-serif', 14)
   DrawText("Start Node", legendFont, win, legendStart.x + legendStart.width + 5, legendStart.y, BLACK)
   DrawText("Target Node", legendFont, win, legendTarget.x + legendTarget.width + 5, legendTarget.y, BLACK)
@@ -83,4 +81,3 @@ def GetClickedPos(pos):
   col = y // GAP
 
   return row, col
-
